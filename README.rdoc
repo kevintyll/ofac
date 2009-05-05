@@ -1,0 +1,7 @@
+= ofac
+
+Description goes here.
+
+== Copyright
+
+Copyright (c) 2009 Kevin Tyll. See LICENSE for details.
