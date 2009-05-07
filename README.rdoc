@@ -1,6 +1,55 @@
 = ofac
 
-Description goes here.
+* http://kevintyll.github.com/ofac
+* http://www.drexel-labs.com
+
+* http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml
+
+== DESCRIPTION:
+
+ofac is a ruby gem that tries to find a match of a person's name and address against the
+Office of Foreign Assets Control's Specially Designated Nationals list...the so called
+terrorist watch list.
+
+This gem, like the ssn_validator gem, started as a need for the company I work for, Clarity Services Inc.
+We decided once again to create a gem out of it and share it with the community.  Much
+thanks goes to the management at Clarity Services Inc. for allowing this code to be open sourced.
+
+== FEATURES/PROBLEMS:
+
+Creates a score, 1 - 100, based on how well the name and address match the data on the SDN list.  Since
+we have to match on strings, the likely hood of an exact match are virtually nil.  So we've created an
+algorithm that creates a score.  The better the match, the higher the score.  A score of 100 would be
+a perfect match.
+
+One limitation of this gem is that we had to truncate the name field in the mysql table that this gem creates.
+The file spec at http://www.treas.gov/offices/enforcement/ofac/sdn/dat_spec.txt, has the name column size at 350 chars.
+It's so big because it's not just individuals on the list, but companies and marine vessels as well.  Mysql
+can't have an index on a BLOB/TEXT field, so we had to make it a VARCHAR(255).  If you're not using Mysql, and
+you're database can handle indexes on larger fields, then you can change the field type in the migration after you
+generate it.
+
+== SYNOPSIS:
+
+
+
+== REQUIREMENTS:
+
+* Rails 2.0.0 or greater
+
+== INSTALL:
+
+* To install the gem:
+    sudo gem install kevintyll-ofac
+* To create the necessary db migration, from the command line, run:
+    script/generate ofac_migration
+* Require the gem in your environment.rb file in the Rails::Initializer block:
+    config.gem 'kevintyll-ofac', :lib => 'ofac'
+* To load your table with the current OFAC data, from the command line, run:
+    rake ofac:update_data
+
+    * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
+        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.
 
 == Copyright
 

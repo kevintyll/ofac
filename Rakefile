@@ -5,11 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "ofac"
-    gem.summary = %Q{TODO}
+    gem.summary = %Q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
+    gem.description = %Q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
     gem.email = "kevintyll@gmail.com"
     gem.homepage = "http://github.com/kevintyll/ofac"
     gem.authors = ["Kevin Tyll"]
-
+    gem.post_install_message = File.readlines("PostInstall.txt").join("")
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
