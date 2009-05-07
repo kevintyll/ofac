@@ -1,0 +1,4 @@
+== 0.1.0 2009-05-7
+
+* 1 major enhancement:
+  * Table creation and data load task complete

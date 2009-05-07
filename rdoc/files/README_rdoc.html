@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: README.rdoc</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>README.rdoc</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>README.rdoc
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu May 07 13:03:47 -0400 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>ofac</h1>
+<ul>
+<li><a href="http://kevintyll.github.com/ofac">kevintyll.github.com/ofac</a>
+
+</li>
+<li><a href="http://www.drexel-labs.com">www.drexel-labs.com</a>
+
+</li>
+<li><a
+href="http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml">www.treas.gov/offices/enforcement/ofac/sdn/index.shtml</a>
+
+</li>
+</ul>
+<h2>DESCRIPTION:</h2>
+<p>
+ofac is a ruby gem that tries to find a match of a person&#8216;s name and
+address against the Office of Foreign Assets Control&#8216;s Specially
+Designated Nationals list...the so called terrorist watch list.
+</p>
+<p>
+This gem, like the ssn_validator gem, started as a need for the company I
+work for, Clarity Services Inc. We decided once again to create a gem out
+of it and share it with the community. Much thanks goes to the management
+at Clarity Services Inc. for allowing this code to be open sourced.
+</p>
+<h2>FEATURES/PROBLEMS:</h2>
+<p>
+Creates a score, 1 - 100, based on how well the name and address match the
+data on the SDN list. Since we have to match on strings, the likely hood of
+an exact match are virtually nil. So we&#8216;ve created an algorithm that
+creates a score. The better the match, the higher the score. A score of 100
+would be a perfect match.
+</p>
+<p>
+One limitation of this gem is that we had to truncate the name field in the
+mysql table that this gem creates. The file spec at <a
+href="http://www.treas.gov/offices/enforcement/ofac/sdn/dat_spec.txt">www.treas.gov/offices/enforcement/ofac/sdn/dat_spec.txt</a>,
+has the name column size at 350 chars. It&#8216;s so big because it&#8216;s
+not just individuals on the list, but companies and marine vessels as well.
+Mysql can&#8216;t have an index on a BLOB/TEXT field, so we had to make it
+a VARCHAR(255). If you&#8216;re not using Mysql, and you&#8216;re database
+can handle indexes on larger fields, then you can change the field type in
+the migration after you generate it.
+</p>
+<h2>SYNOPSIS:</h2>
+<h2>REQUIREMENTS:</h2>
+<ul>
+<li>Rails 2.0.0 or greater
+
+</li>
+</ul>
+<h2>INSTALL:</h2>
+<ul>
+<li>To install the gem:
+
+<pre>
+  sudo gem install kevintyll-ofac
+</pre>
+</li>
+<li>To create the necessary db migration, from the command line, run:
+
+<pre>
+  script/generate ofac_migration
+</pre>
+</li>
+<li>Require the gem in your environment.rb file in the Rails::Initializer
+block:
+
+<pre>
+  config.gem 'kevintyll-ofac', :lib =&gt; 'ofac'
+</pre>
+</li>
+<li>To load your table with the current OFAC data, from the command line, run:
+
+<pre>
+  rake ofac:update_data
+
+  * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
+      http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.
+</pre>
+</li>
+</ul>
+<h2>Copyright</h2>
+<p>
+Copyright (c) 2009 Kevin Tyll. See LICENSE for details.
+</p>
+
+    </div>
+
+
+   </div>
+
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
