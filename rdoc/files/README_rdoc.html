@@ -56,7 +56,7 @@
     </tr>
     <tr class="top-aligned-row">
       <td><strong>Last Update:</strong></td>
-      <td>Thu May 07 13:03:47 -0400 2009</td>
+      <td>Mon May 11 15:23:48 -0400 2009</td>
     </tr>
     </table>
   </div>
@@ -92,28 +92,130 @@ Designated Nationals list...the so called terrorist watch list.
 This gem, like the ssn_validator gem, started as a need for the company I
 work for, Clarity Services Inc. We decided once again to create a gem out
 of it and share it with the community. Much thanks goes to the management
-at Clarity Services Inc. for allowing this code to be open sourced.
+at Clarity Services Inc. for allowing this code to be open sourced. Thanks
+also to Larry Berland at Clarity Services Inc. The matching logic in the
+ofac_match.rb file was derived from his work.
 </p>
-<h2>FEATURES/PROBLEMS:</h2>
+<h2>FEATURES:</h2>
 <p>
-Creates a score, 1 - 100, based on how well the name and address match the
-data on the SDN list. Since we have to match on strings, the likely hood of
-an exact match are virtually nil. So we&#8216;ve created an algorithm that
-creates a score. The better the match, the higher the score. A score of 100
-would be a perfect match.
+Creates a score, 1 - 100, based on how well the name, address and city
+match the data on the SDN list. Since we have to match on strings, the
+likely hood of an exact match are virtually nil. So we&#8216;ve created an
+algorithm that creates a score. The better the match, the higher the score.
+A score of 100 would be a perfect match.
 </p>
 <p>
-One limitation of this gem is that we had to truncate the name field in the
-mysql table that this gem creates. The file spec at <a
-href="http://www.treas.gov/offices/enforcement/ofac/sdn/dat_spec.txt">www.treas.gov/offices/enforcement/ofac/sdn/dat_spec.txt</a>,
-has the name column size at 350 chars. It&#8216;s so big because it&#8216;s
-not just individuals on the list, but companies and marine vessels as well.
-Mysql can&#8216;t have an index on a BLOB/TEXT field, so we had to make it
-a VARCHAR(255). If you&#8216;re not using Mysql, and you&#8216;re database
-can handle indexes on larger fields, then you can change the field type in
-the migration after you generate it.
+The score is calculated by adding up the weightings of each part that is
+matched. So if only name is matched, then the max score is the weight for
+<tt>:name</tt> which is 60
+</p>
+<p>
+It&#8216;s possible to get partial matches, which will add partial weight
+to the score. If there is not a match on the element as it is passed in,
+then each word element gets broken down and matches are tried on each
+partial element. The weighting is distrubuted equally for each partial that
+is matched.
+</p>
+<p>
+If exact matches are not made, then a sounds like match is attempted. Any
+match made by sounds like is given 75% of it&#8216;s weight to the score.
+Example:
+</p>
+<p>
+If you are trying to match the name Kevin Tyll and there is a record for
+Smith, Kevin in the database, then we will try to match both Kevin and Tyll
+separately, with each element Smith and Kevin. Since only Kevin will find a
+match, and there were 2 elements in the searched name, the score will be
+added by half the weighting for <tt>:name</tt>. So since the weight for
+<tt>:name</tt> is 60, then we will add 30 to the score.
+</p>
+<p>
+If you are trying to match the name Kevin Gregory Tyll and there is a
+record for Tyll, Kevin in the database, then we will try to match Kevin and
+Gregory and Tyll separately, with each element Tyll and Kevin. Since both
+Kevin and Tyll will find a match, and there were 3 elements in the searched
+name, the score will be added by 2/3 the weighting for <tt>:name</tt>. So
+since the weight for <tt>:name</tt> is 60, then we will add 40 to the
+score.
+</p>
+<p>
+If you are trying to match the name Kevin Tyll and there is a record for
+Kevin Gregory Tyll in the database, then we will try to match Kevin and
+Tyll separately, with each element Tyll and Kevin and Gregory. Since both
+Kevin and Tyll will find a match, and there were 2 elements in the searched
+name, the score will be added by 2/2 the weighting for <tt>:name</tt>. So
+since the weight for <tt>:name</tt> is 60, then we will add 60 to the
+score.
+</p>
+<p>
+If you are trying to match the name Kevin Tyll, and there is a record for
+Teel, Kevin in the database, then an exact match will be found for Kevin,
+and a sounds like match will be made for Tyll. Since there were 2 elements
+in hte searched name, and the weight for <tt>:name</tt> is 60, then each
+element is worth 30. Since Kevin was an exact match, it will add 30, and
+since Tyll was a sounds like match, it will add 30 * .75. So the
+<tt>:name</tt> portion of the search will be worth 53.
+</p>
+<p>
+Matches for name are made for both the name and any aliases in the OFAC
+database.
+</p>
+<p>
+Matches for <tt>:city</tt> and <tt>:address</tt> will only be added to the
+score if there is first a match on <tt>:name</tt>.
 </p>
 <h2>SYNOPSIS:</h2>
+<p>
+Accepts a hash with the identity&#8216;s demographic information
+</p>
+<pre>
+   Ofac.new({:name =&gt; 'Oscar Hernandez', :city =&gt; 'Clearwater', :address =&gt; '123 somewhere ln'})
+</pre>
+<p>
+<tt>:name</tt> is required to get a score. If <tt>:name</tt> is missing, an
+error will not be thrown, but a score of 0 will be returned.
+</p>
+<p>
+The more information provided, the higher the score could be. A score of
+100 would mean all fields were passed in, and all fields were 100% matches.
+If only the name is passed in without an address, it will be impossible to
+get a score of 100, even if the name matches perfectly.
+</p>
+<p>
+Acceptable hash keys and their weighting in score calculation:
+</p>
+<ul>
+<li><tt>:name</tt> (weighting = 60%) (required) This can be a person, business,
+or marine vessel
+
+</li>
+<li><tt>:address</tt> (weighting = 10%)
+
+</li>
+<li><tt>:city</tt> (weighting = 30%)
+
+</li>
+<li>Instantiate the object with the identity&#8216;s name, street address, and
+city.
+
+<pre>
+  ofac = Ofac.new(:name =&gt; 'Kevin Tyll', :city =&gt; 'Clearwater', :address =&gt; '123 Somewhere Ln.')
+</pre>
+</li>
+<li>Then get the score
+
+<pre>
+  ofac.score =&gt; return the score 1 - 100
+</pre>
+</li>
+<li>You can also get the list of all the partial matches with the score of each
+record.
+
+<pre>
+  ofac.possible_hits =&gt; returns an array of hashes.
+</pre>
+</li>
+</ul>
 <h2>REQUIREMENTS:</h2>
 <ul>
 <li>Rails 2.0.0 or greater

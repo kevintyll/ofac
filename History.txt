@@ -2,3 +2,8 @@
 
 * 1 major enhancement:
   * Table creation and data load task complete
+
+== 1.0.0 2009-05-11
+
+* 1 major enhancement:
+  * Initail release

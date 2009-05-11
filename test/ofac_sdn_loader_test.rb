@@ -7,7 +7,7 @@ class OfacSdnLoaderTest < Test::Unit::TestCase
 
     should "load table from files multiple times and always have the same record count" do
       assert_equal(0,OfacSdn.count)
-      OfacSdnLoader.load_current_sdn_file
+      OfacSdnLoader.load_current_sdn_file #this method is mocked to load test files instead of the live files from the web.
       assert_equal(19, OfacSdn.count)
       OfacSdnLoader.load_current_sdn_file
       assert_equal(19, OfacSdn.count)

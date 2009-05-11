@@ -86,10 +86,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000005">death_master_file_hit?</a>&nbsp;&nbsp;
-      <a href="#M000004">death_master_file_record</a>&nbsp;&nbsp;
-      <a href="#M000002">new</a>&nbsp;&nbsp;
-      <a href="#M000003">valid?</a>&nbsp;&nbsp;
+      <a href="#M000004">new</a>&nbsp;&nbsp;
+      <a href="#M000006">possible_hits</a>&nbsp;&nbsp;
+      <a href="#M000005">score</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -104,44 +103,6 @@
 
 
 
-    <div id="attribute-list">
-      <h3 class="section-bar">Attributes</h3>
-
-      <div class="name-list">
-        <table>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">area</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">as_of</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">errors</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">group</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">serial_number</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        <tr class="top-aligned-row context-row">
-          <td class="context-item-name">ssn</td>
-          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
-          <td class="context-item-desc"></td>
-        </tr>
-        </table>
-      </div>
-    </div>
       
 
 
@@ -149,71 +110,59 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000002" class="method-detail">
-        <a name="M000002"></a>
+      <div id="method-M000004" class="method-detail">
+        <a name="M000004"></a>
 
         <div class="method-heading">
-          <a href="#M000002" class="method-signature">
-          <span class="method-name">new</span><span class="method-args">(ssn)</span>
+          <a href="#M000004" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(identity)</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Instantiate the object passing in a social security number. The ssn can be
-a string or integer, with or without the &#8217;-&#8217;s.
+Accepts a hash with the identity&#8216;s demographic information
 </p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000002-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000002-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 9</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">ssn</span>)
-    <span class="ruby-ivar">@errors</span> = []
-    <span class="ruby-identifier">ssn</span> = <span class="ruby-identifier">ssn</span>.<span class="ruby-identifier">to_s</span>
-    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/-/</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/\d\d\d-\d\d-\d\d\d\d/</span>
-      <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'Hyphen misplaced.'</span>
-    <span class="ruby-keyword kw">end</span>
+  Ofac.new({:name =&gt; 'Oscar Hernandez', :city =&gt; 'Clearwater', :address =&gt; '123 somewhere ln'})
+</pre>
+<p>
+<tt>:name</tt> is required to get a <a href="Ofac.html#M000005">score</a>.
+If <tt>:name</tt> is missing, an error will not be thrown, but a <a
+href="Ofac.html#M000005">score</a> of 0 will be returned.
+</p>
+<p>
+The more information provided, the higher the <a
+href="Ofac.html#M000005">score</a> could be. A <a
+href="Ofac.html#M000005">score</a> of 100 would mean all fields were passed
+in, and all fields were 100% matches. If only the name is passed in without
+an address, it will be impossible to get a <a
+href="Ofac.html#M000005">score</a> of 100, even if the name matches
+perfectly.
+</p>
+<p>
+Acceptable hash keys and their weighting in <a
+href="Ofac.html#M000005">score</a> calculation:
+</p>
+<ul>
+<li><tt>:name</tt> (weighting = 60%) (required) This can be a person, business,
+or marine vessel
 
-    <span class="ruby-identifier">ssn</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-value str">'-'</span>,<span class="ruby-value str">''</span>)
-    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ssn</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">!=</span> <span class="ruby-value">9</span>
-      <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-value str">'SSN not 9 digits long.'</span>
-    <span class="ruby-keyword kw">end</span>
+</li>
+<li><tt>:address</tt> (weighting = 10%)
 
-    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\D/</span>
-      <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'Non-digit found.'</span>
-    <span class="ruby-keyword kw">end</span>
+</li>
+<li><tt>:city</tt> (weighting = 30%)
 
-    <span class="ruby-comment cmt">#known dummy numbers</span>
-    <span class="ruby-keyword kw">if</span> [<span class="ruby-value str">&quot;078051120&quot;</span>,<span class="ruby-value str">&quot;111111111&quot;</span>,<span class="ruby-value str">&quot;123456789&quot;</span>,<span class="ruby-value str">&quot;219099999&quot;</span>,<span class="ruby-value str">&quot;999999999&quot;</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">||</span> (<span class="ruby-identifier">ssn</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value str">&quot;987654320&quot;</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value str">&quot;987654329&quot;</span>)
-      <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Known dummy SSN.&quot;</span>
-    <span class="ruby-keyword kw">end</span>
-    <span class="ruby-comment cmt">#known invalid area, group and serial numbers</span>
-    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ssn</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\d{3}00\d{4}|0000\Z/</span>
-      <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;Invalid group or serial number.&quot;</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-ivar">@ssn</span> = <span class="ruby-identifier">ssn</span>
-    <span class="ruby-ivar">@area</span> = <span class="ruby-identifier">ssn</span>.<span class="ruby-identifier">first</span>(<span class="ruby-value">3</span>)
-    <span class="ruby-ivar">@group</span> = <span class="ruby-identifier">ssn</span>[<span class="ruby-value">3</span>,<span class="ruby-value">2</span>]
-    <span class="ruby-ivar">@serial_number</span> = <span class="ruby-identifier">ssn</span>.<span class="ruby-identifier">last</span>(<span class="ruby-value">4</span>)
-
-    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">empty?</span>
-      <span class="ruby-ivar">@ssn_high_group_code</span> = <span class="ruby-constant">SsnHighGroupCode</span>.<span class="ruby-identifier">find_by_area</span>(<span class="ruby-ivar">@area</span>, <span class="ruby-identifier">:order</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'as_of desc'</span>)
-      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@ssn_high_group_code</span>.<span class="ruby-identifier">nil?</span>
-        <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Area '#{@area}' has not been assigned.&quot;</span>
-      <span class="ruby-keyword kw">else</span>
-        <span class="ruby-ivar">@as_of</span> = <span class="ruby-ivar">@ssn_high_group_code</span>.<span class="ruby-identifier">as_of</span>
-
-        <span class="ruby-identifier">define_group_ranks</span>
-          
-        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@group_ranks</span>[<span class="ruby-ivar">@group</span>] <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@group_ranks</span>[<span class="ruby-ivar">@ssn_high_group_code</span>.<span class="ruby-identifier">group</span>]
-          <span class="ruby-ivar">@errors</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;Group '#{@group}' has not been assigned yet for area '#{@area}'&quot;</span>
-        <span class="ruby-keyword kw">end</span>
-      <span class="ruby-keyword kw">end</span>
-    <span class="ruby-keyword kw">end</span>
-
-
+</li>
+</ul>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000004-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 22</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identity</span>)
+    <span class="ruby-ivar">@identity</span> = <span class="ruby-identifier">identity</span>
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>
@@ -222,78 +171,128 @@ a string or integer, with or without the &#8217;-&#8217;s.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
+
+        <div class="method-heading">
+          <a href="#M000006" class="method-signature">
+          <span class="method-name">possible_hits</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <pre>
+ Returns an array of hashes of records in the OFAC data that found partial matches with that record's score.
+
+     Ofac.new({:name =&gt; 'Oscar Hernandez', :city =&gt; 'Clearwater', :address =&gt; '123 somewhere ln'}).possible_hits
+</pre>
+<p>
+returns
+</p>
+<pre>
+     [{:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|GUAMATUR, S.A.&quot;, :city=&gt;&quot;Clearwater&quot;}, {:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|Alternate Name&quot;, :city=&gt;&quot;Clearwater&quot;}]
+</pre>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 75</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">possible_hits</span>
+    <span class="ruby-ivar">@possible_hits</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">retrieve_possible_hits</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
       <div id="method-M000005" class="method-detail">
         <a name="M000005"></a>
 
         <div class="method-heading">
           <a href="#M000005" class="method-signature">
-          <span class="method-name">death_master_file_hit?</span><span class="method-args">()</span>
+          <span class="method-name">score</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Determines if the passed in ssn belongs to the deceased.
+Creates a <a href="Ofac.html#M000005">score</a>, 1 - 100, based on how well
+the name and address match the data on the SDN (Specially Designated
+Nationals) list.
+</p>
+<p>
+The <a href="Ofac.html#M000005">score</a> is calculated by adding up the
+weightings of each part that is matched. So if only name is matched, then
+the max <a href="Ofac.html#M000005">score</a> is the weight for
+<tt>:name</tt> which is 60
+</p>
+<p>
+It&#8216;s possible to get partial matches, which will add partial weight
+to the <a href="Ofac.html#M000005">score</a>. If there is not a match on
+the element as it is passed in, then each word element gets broken down and
+matches are tried on each partial element. The weighting is distrubuted
+equally for each partial that is matched.
+</p>
+<p>
+If exact matches are not made, then a sounds like match is attempted. Any
+match made by sounds like is given 75% of it&#8216;s weight to the <a
+href="Ofac.html#M000005">score</a>.
+</p>
+<p>
+Example:
+</p>
+<p>
+If you are trying to match the name Kevin Tyll and there is a record for
+Smith, Kevin in the database, then we will try to match both Kevin and Tyll
+separately, with each element Smith and Kevin. Since only Kevin will find a
+match, and there were 2 elements in the searched name, the <a
+href="Ofac.html#M000005">score</a> will be added by half the weighting for
+<tt>:name</tt>. So since the weight for <tt>:name</tt> is 60, then we will
+add 30 to the <a href="Ofac.html#M000005">score</a>.
+</p>
+<p>
+If you are trying to match the name Kevin Gregory Tyll and there is a
+record for Tyll, Kevin in the database, then we will try to match Kevin and
+Gregory and Tyll separately, with each element Tyll and Kevin. Since both
+Kevin and Tyll will find a match, and there were 3 elements in the searched
+name, the <a href="Ofac.html#M000005">score</a> will be added by 2/3 the
+weighting for <tt>:name</tt>. So since the weight for <tt>:name</tt> is 60,
+then we will add 40 to the <a href="Ofac.html#M000005">score</a>.
+</p>
+<p>
+If you are trying to match the name Kevin Tyll and there is a record for
+Kevin Gregory Tyll in the database, then we will try to match Kevin and
+Tyll separately, with each element Tyll and Kevin and Gregory. Since both
+Kevin and Tyll will find a match, and there were 2 elements in the searched
+name, the <a href="Ofac.html#M000005">score</a> will be added by 2/2 the
+weighting for <tt>:name</tt>. So since the weight for <tt>:name</tt> is 60,
+then we will add 60 to the <a href="Ofac.html#M000005">score</a>.
+</p>
+<p>
+If you are trying to match the name Kevin Tyll, and there is a record for
+Teel, Kevin in the database, then an exact match will be found for Kevin,
+and a sounds like match will be made for Tyll. Since there were 2 elements
+in hte searched name, and the weight for <tt>:name</tt> is 60, then each
+element is worth 30. Since Kevin was an exact match, it will add 30, and
+since Tyll was a sounds like match, it will add 30 * .75. So the
+<tt>:name</tt> portion of the search will be worth 53.
+</p>
+<p>
+Matches for name are made for both the name and any aliases in the OFAC
+database.
+</p>
+<p>
+Matches for <tt>:city</tt> and <tt>:address</tt> will only be added to the
+<a href="Ofac.html#M000005">score</a> if there is first a match on
+<tt>:name</tt>.
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 69</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">death_master_file_hit?</span>
-    <span class="ruby-operator">!</span><span class="ruby-identifier">death_master_file_record</span>.<span class="ruby-identifier">nil?</span>
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000004" class="method-detail">
-        <a name="M000004"></a>
-
-        <div class="method-heading">
-          <a href="#M000004" class="method-signature">
-          <span class="method-name">death_master_file_record</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-returns the death master record if there is one.
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000004-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 64</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">death_master_file_record</span>
-    <span class="ruby-constant">DeathMasterFile</span>.<span class="ruby-identifier">find_by_social_security_number</span>(<span class="ruby-ivar">@ssn</span>)
-  <span class="ruby-keyword kw">end</span>
-</pre>
-          </div>
-        </div>
-      </div>
-
-      <div id="method-M000003" class="method-detail">
-        <a name="M000003"></a>
-
-        <div class="method-heading">
-          <a href="#M000003" class="method-signature">
-          <span class="method-name">valid?</span><span class="method-args">()</span>
-          </a>
-        </div>
-      
-        <div class="method-description">
-          <p>
-Determines whether or not the passed in ssn passed all validations.
-</p>
-          <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000003-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000003-source">
-<pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 59</span>
-  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">valid?</span>
-    <span class="ruby-ivar">@errors</span>.<span class="ruby-identifier">empty?</span>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 65</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">score</span>
+    <span class="ruby-ivar">@score</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">calculate_score</span>
   <span class="ruby-keyword kw">end</span>
 </pre>
           </div>

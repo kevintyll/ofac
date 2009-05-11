@@ -1,92 +1,119 @@
+require 'activerecord'
+require 'active_record/connection_adapters/mysql_adapter'
+
 class Ofac
 
-  attr_reader :ssn,:area,:group,:serial_number,:as_of
-  attr_reader :errors
-
-
-  #Instantiate the object passing in a social security number.
-  #The ssn can be a string or integer, with or without the '-'s.
-  def initialize(ssn)
-    @errors = []
-    ssn = ssn.to_s
-    if ssn =~ /-/ && ssn !~ /\d\d\d-\d\d-\d\d\d\d/
-      @errors << 'Hyphen misplaced.'
-    end
-
-    ssn.gsub!('-','')
-    if ssn.to_s.size != 9
-      @errors <<  'SSN not 9 digits long.'
-    end
-
-    if ssn =~ /\D/
-      @errors << 'Non-digit found.'
-    end
-
-    #known dummy numbers
-    if ["078051120","111111111","123456789","219099999","999999999"].include? ssn || (ssn >= "987654320" and ssn <= "987654329")
-      @errors << "Known dummy SSN."
-    end
-    #known invalid area, group and serial numbers
-    if ssn =~ /\d{3}00\d{4}|0000\Z/
-      @errors << "Invalid group or serial number."
-    end
-
-    @ssn = ssn
-    @area = ssn.first(3)
-    @group = ssn[3,2]
-    @serial_number = ssn.last(4)
-
-    if @errors.empty?
-      @ssn_high_group_code = SsnHighGroupCode.find_by_area(@area, :order => 'as_of desc')
-      if @ssn_high_group_code.nil?
-        @errors << "Area '#{@area}' has not been assigned."
-      else
-        @as_of = @ssn_high_group_code.as_of
-
-        define_group_ranks
-          
-        if @group_ranks[@group] > @group_ranks[@ssn_high_group_code.group]
-          @errors << "Group '#{@group}' has not been assigned yet for area '#{@area}'"
-        end
-      end
-    end
-
-
+  
+  # Accepts a hash with the identity's demographic information
+  #
+  #   Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+  #
+  # <tt>:name</tt> is required to get a score.  If <tt>:name</tt> is missing, an error will not be thrown, but a score of 0 will be returned.
+  #
+  # The more information provided, the higher the score could be.  A score of 100 would mean all fields
+  # were passed in, and all fields were 100% matches.  If only the name is passed in without an address,
+  # it will be impossible to get a score of 100, even if the name matches perfectly.
+  #
+  # Acceptable hash keys and their weighting in score calculation:
+  #
+  # * <tt>:name</tt> (weighting = 60%) (required) This can be a person, business, or marine vessel
+  # * <tt>:address</tt> (weighting = 10%)
+  # * <tt>:city</tt> (weighting = 30%)
+  def initialize(identity)
+    @identity = identity
   end
 
-  #Determines whether or not the passed in
-  #ssn passed all validations.
-  def valid?
-    @errors.empty?
+  # Creates a score, 1 - 100, based on how well the name and address match the data on the
+  # SDN (Specially Designated Nationals) list.
+  #
+  # The score is calculated by adding up the weightings of each part that is matched. So
+  # if only name is matched, then the max score is the weight for <tt>:name</tt> which is 60
+  #
+  # It's possible to get partial matches, which will add partial weight to the score.  If there
+  # is not a match on the element as it is passed in, then each word element gets broken down
+  # and matches are tried on each partial element.  The weighting is distrubuted equally for
+  # each partial that is matched.
+  #
+  # If exact matches are not made, then a sounds like match is attempted.  Any match made by sounds like
+  # is given 75% of it's weight to the score.
+  #
+  # Example:
+  #
+  # If you are trying to match the name Kevin Tyll and there is a record for Smith, Kevin in the database, then
+  # we will try to match both Kevin and Tyll separately, with each element Smith and Kevin.  Since only Kevin
+  # will find a match, and there were 2 elements in the searched name, the score will be added by half the weighting
+  # for <tt>:name</tt>.  So since the weight for <tt>:name</tt> is 60, then we will add 30 to the score.
+  #
+  # If you are trying to match the name Kevin Gregory Tyll and there is a record for Tyll, Kevin in the database, then
+  # we will try to match Kevin and Gregory and Tyll separately, with each element Tyll and Kevin.  Since both Kevin
+  # and Tyll will find a match, and there were 3 elements in the searched name, the score will be added by 2/3 the weighting
+  # for <tt>:name</tt>.  So since the weight for <tt>:name</tt> is 60, then we will add 40 to the score.
+  #
+  # If you are trying to match the name Kevin Tyll and there is a record for Kevin Gregory Tyll in the database, then
+  # we will try to match Kevin and Tyll separately, with each element Tyll and Kevin and Gregory.  Since both Kevin
+  # and Tyll will find a match, and there were 2 elements in the searched name, the score will be added by 2/2 the weighting
+  # for <tt>:name</tt>.  So since the weight for <tt>:name</tt> is 60, then we will add 60 to the score.
+  #
+  # If you are trying to match the name Kevin Tyll, and there is a record for Teel, Kevin in the database, then an exact match
+  # will be found for Kevin, and a sounds like match will be made for Tyll.  Since there were 2 elements in hte searched name,
+  # and the weight for <tt>:name</tt> is 60, then each element is worth 30.  Since Kevin was an exact match, it will add 30, and
+  # since Tyll was a sounds like match, it will add 30 * .75.  So the <tt>:name</tt> portion of the search will be worth 53.
+  #
+  # Matches for name are made for both the name and any aliases in the OFAC database.
+  #
+  # Matches for <tt>:city</tt> and <tt>:address</tt> will only be added to the score if there is first a match on <tt>:name</tt>.
+  def score
+    @score || calculate_score
   end
 
-  #returns the death master record if there is one.
-  def death_master_file_record
-    DeathMasterFile.find_by_social_security_number(@ssn)
+  # Returns an array of hashes of records in the OFAC data that found partial matches with that record's score.
+  # 
+  #     Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).possible_hits
+  #returns
+  #     [{:address=>"123 Somewhere Ln", :score=>100, :name=>"HERNANDEZ, Oscar|GUAMATUR, S.A.", :city=>"Clearwater"}, {:address=>"123 Somewhere Ln", :score=>100, :name=>"HERNANDEZ, Oscar|Alternate Name", :city=>"Clearwater"}]
+  #
+  def possible_hits
+    @possible_hits || retrieve_possible_hits
   end
-
-  #Determines if the passed in ssn belongs to the deceased.
-  def death_master_file_hit?
-    !death_master_file_record.nil?
-  end
-
 
   private
 
-  def define_group_ranks
-    @group_ranks = {}
-    rank = 0
-    (1..9).step(2) do |group|
-      @group_ranks.merge!("0#{group.to_s}" => rank += 1)
-    end
-    (10..98).step(2) do |group|
-      @group_ranks.merge!(group.to_s => rank += 1)
-    end
-    (2..8).step(2) do |group|
-      @group_ranks.merge!("0#{group.to_s}" => rank += 1)
-    end
-    (11..99).step(2) do |group|
-      @group_ranks.merge!(group.to_s => rank += 1)
-    end
+  def retrieve_possible_hits
+    score
+    @possible_hits
   end
+
+  def calculate_score
+    unless @identity[:name].to_s == ''
+      if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::MysqlAdapter)
+        #first get a list from the database of possible matches by name
+        #this query is pretty liberal, we just want to get a list of possible
+        #matches from the database that we can run through our ruby matching algorithm
+        partial_name = @identity[:name].gsub!(/\W/,'|')
+        name_array = partial_name.split('|')
+        name_array.delete('')
+        sql_name_partial = name_array.collect {|partial_name| "INSTR(SUBSTR(SOUNDEX(concat('O',name)), 2), REPLACE(SUBSTR(SOUNDEX('O#{partial_name}'), 2), '0', '')) > 0"}.join(' and ')
+        sql_alt_name_partial = name_array.collect {|partial_name| "INSTR(SUBSTR(SOUNDEX(concat('O',alternate_identity_name)), 2), REPLACE(SUBSTR(SOUNDEX('O#{partial_name}'), 2), '0', '')) > 0"}.join(' and ')
+        ##this sql for getting "accurate sounds like" functionality comes from:
+        #http://jgeewax.wordpress.com/2006/07/21/efficient-sounds-like-searches-in-mysql/
+        possible_sdns = OfacSdn.connection.select_all("select concat(name,'|', alternate_identity_name) name, address, city
+                                from ofac_sdns
+                                where name is not null
+                                and (((#{sql_name_partial}))
+                                or ((#{sql_alt_name_partial})))")
+      else
+        possible_sdns = OfacSdn.find(:all, :select => 'name, alternate_identity_name, address, city').collect{|sdn| {:name => "#{sdn.name}|#{sdn.alternate_identity_name}", :address => sdn.address, :city => sdn.city}}
+      end
+      
+      match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
+                                  :address => {:weight => 10, :token => @identity[:address]},
+                                  :city => {:weight => 30, :token => @identity[:city]}})
+
+      score = match.score(possible_sdns)
+      @possible_hits = match.possible_hits
+    end
+    @score = score || 0
+    return @score
+  end
+
 end

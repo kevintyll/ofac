@@ -21,7 +21,7 @@ class Test::Unit::TestCase
     silence_stream(STDOUT) do
       ActiveRecord::Schema.define(:version => 1) do
         create_table :ofac_sdns do |t|
-          t.string    :name
+          t.text      :name
           t.string    :sdn_type
           t.string    :program
           t.string    :title
@@ -41,8 +41,6 @@ class Test::Unit::TestCase
           t.string    :alternate_identity_remarks
           t.timestamps
         end
-
-        add_index :ofac_sdns, [:name]
       end
     end
   end

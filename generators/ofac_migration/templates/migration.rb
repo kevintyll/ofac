@@ -2,7 +2,7 @@ class CreateOfacSdnTable < ActiveRecord::Migration
   
   def self.up
     create_table :ofac_sdns do |t|
-      t.string    :name
+      t.text      :name
       t.string    :sdn_type
       t.string    :program
       t.string    :title
@@ -22,8 +22,6 @@ class CreateOfacSdnTable < ActiveRecord::Migration
       t.string    :alternate_identity_remarks
       t.timestamps
     end
-    
-    add_index :ofac_sdns, [:name]
   end
   
   def self.down
