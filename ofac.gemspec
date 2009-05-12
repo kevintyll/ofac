@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ofac}
-  s.version = "1.0.0"
+  s.version = "1.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Kevin Tyll"]
-  s.date = %q{2009-05-11}
+  s.date = %q{2009-05-12}
   s.description = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
   s.email = %q{kevintyll@gmail.com}
   s.extra_rdoc_files = [
