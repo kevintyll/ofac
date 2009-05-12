@@ -7,3 +7,8 @@
 
 * 1 major enhancement:
   * Initail release
+
+== 1.1.0 2009-05-12
+
+* 1 minor enhancement:
+  * Modified the match alogorithm to reduct the score if there is not an address or city match if the data is in the database.

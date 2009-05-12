@@ -100,9 +100,10 @@ class OfacMatch
 
                 value = 0
                 partial_weight = 1/token_array.length.to_f
+                
                 token_array.each do |partial_token|
                   #first see if we get an exact match of the partial
-                  if match_array.include?(partial_token)
+                  if success = match_array.include?(partial_token)
                     value += partial_weight
                   else
                     #otherwise, see if the partial sounds like any part of the OFAC record
@@ -110,8 +111,16 @@ class OfacMatch
                       if partial_match.ofac_sounds_like(partial_token,false)
                         #give partial value for every part of token that is matched.
                         value += partial_weight * 0.75
+                        success = true
                         break
                       end
+                    end
+                  end
+                  unless success
+                    #if this for :address or :city
+                    #and there is no match at all, subtract 10% of the weight from :name score
+                    unless field == :name
+                      value -= partial_weight * 0.1
                     end
                   end
                 end

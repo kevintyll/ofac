@@ -52,13 +52,27 @@ and Tyll will find a match, and there were 2 elements in the searched name, the 
 for <tt>:name</tt>.  So since the weight for <tt>:name</tt> is 60, then we will add 60 to the score.
 
 If you are trying to match the name Kevin Tyll, and there is a record for Teel, Kevin in the database, then an exact match
-will be found for Kevin, and a sounds like match will be made for Tyll.  Since there were 2 elements in hte searched name,
+will be found for Kevin, and a sounds like match will be made for Tyll.  Since there were 2 elements in the searched name,
 and the weight for <tt>:name</tt> is 60, then each element is worth 30.  Since Kevin was an exact match, it will add 30, and
 since Tyll was a sounds like match, it will add 30 * .75.  So the <tt>:name</tt> portion of the search will be worth 53.
+
+If data is in the database for city and or address, and you pass data in for these elements, the score will be reduced by 10%
+of the weight if there is no match or sounds like match.  So if you get a match on name, you've already got a score of 60.  So
+if you don't pass in an address or city, or if you do, but there is no city or address info in the database, then your final score
+will be 60.  But if you do pass in a city, say Tampa, and the city in the Database is New York, then we will deduct 10% of the
+weight (30 * .1) = 3 from the score since 30 is the weight for <tt>:city</tt>.  So the final score will be 57.
+
+If were searching for New York, and the database had New Deli, then there would be a match on New, but not on Deli.
+Since there were 2 elements in the searched city, each hit is worth 15.  So the match on New would add 15, but the non-match
+on York would subtract (15 * .1) = 1.5 from the score.  So the score would be (60 + 15 - 1.5) = 74, due to rounding.
+
+Only <tt>:city</tt> and <tt>:address</tt> subtract from the score, No match on name simply returns 0.
 
 Matches for name are made for both the name and any aliases in the OFAC database.
 
 Matches for <tt>:city</tt> and <tt>:address</tt> will only be added to the score if there is first a match on <tt>:name</tt>.
+
+We consider a score of 60 to be reasonable as a hit.
 
 == SYNOPSIS:
 Accepts a hash with the identity's demographic information
