@@ -49,34 +49,29 @@
       <span class="small">by <a href="http://github.com/kevintyll">kevintyll</a></span></h1>
 
     <div class="description">
-      ofac is a ruby gem that tries to find a match of a person's name and address against the
+      <p>ofac is a ruby gem that tries to find a match of a person's name and address against the
 Office of Foreign Assets Control's Specially Designated Nationals list...the so called
-terrorist watch list.
+terrorist watch list.</p>
 
-Creates a score, 1 - 100, based on how well the name, address and city match the data on the SDN list.  Since
+<p>The ofac gem creates a score, 1 - 100, based on how well the name, address and city match the data on the SDN list.  Since
 we have to match on strings, the likely hood of an exact match are virtually nil.  So we've created an
 algorithm that creates a score.  The better the match, the higher the score.  A score of 100 would be
-a perfect match.
+a perfect match.</p>
+
+<p>This gem, like the ssn_validator gem, started as a need for the company I work for, Clarity Services Inc.
+We decided once again to create a gem out of it and share it with the community.  Much
+thanks goes to the management at Clarity Services Inc. for allowing this code to be open sourced.  Thanks
+also to Larry Berland at Clarity Services Inc.  The matching logic in the ofac_match.rb file was derived from
+his work.</p>
+
+<p>Check out the <a href="http://github.com/kevintyll/ofac">repository</a> for more information.</p>
     </div>
 
-    <h2>Install</h2>
-<p>* To install the gem:
-    sudo gem install kevintyll-ofac
-* To create the necessary db migration, from the command line, run:
-    script/generate ofac_migration
-* Require the gem in your environment.rb file in the Rails::Initializer block:
-    config.gem 'kevintyll-ofac', :lib => 'ofac'
-* To load your table with the current OFAC data, from the command line, run:
-    rake ofac:update_data
-
-    * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
-        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.</p>
-<h2>License</h2>
-<p>Copyright (c) 2009 Kevin Tyll. See LICENSE for details.</p>
-<h2>Authors</h2>
-<p>Kevin Tyll (kevintyll@gmail.com)<br/><br/>      </p>
+ <h2>Author</h2>
+<p>Kevin Tyll </p>
 <h2>Contact</h2>
-<p>Kevin Tyll (kevintyll@gmail.com)<br/>      </p>
+<p>Kevin Tyll (kevintyll@gmail.com)
+<br/> </p>
 
 
     <h2>Download</h2>
