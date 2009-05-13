@@ -13,7 +13,7 @@
 * 1 minor enhancement:
   * Modified the match alogorithm to reduct the score if there is not an address or city match if the data is in the database.
 
-== 1.1.1 2009-05-13
+== 1.1.2 2009-05-13
 
 * 2 minor changes:
   * Changed the sql in the initial search to do a like instead of a soundex.  For short names, the soundex returned almost the entire table

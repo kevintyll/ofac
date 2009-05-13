@@ -109,8 +109,8 @@ class Ofac
                                 from ofac_sdns
                                 where name is not null
                                 and sdn_type = 'individual'
-                                and #{sql_name_partial}
-                                or #{sql_alt_name_partial}")
+                                and (#{sql_name_partial}
+                                or #{sql_alt_name_partial})")
       possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
      
       match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
