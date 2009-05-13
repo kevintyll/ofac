@@ -41,6 +41,7 @@ class Test::Unit::TestCase
           t.string    :alternate_identity_remarks
           t.timestamps
         end
+        add_index :ofac_sdns, :sdn_type
       end
     end
   end

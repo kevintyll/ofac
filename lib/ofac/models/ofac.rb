@@ -1,6 +1,3 @@
-require 'activerecord'
-require 'active_record/connection_adapters/mysql_adapter'
-
 class Ofac
 
   
@@ -99,29 +96,26 @@ class Ofac
 
   def calculate_score
     unless @identity[:name].to_s == ''
-      if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::MysqlAdapter)
-        #first get a list from the database of possible matches by name
-        #this query is pretty liberal, we just want to get a list of possible
-        #matches from the database that we can run through our ruby matching algorithm
-        partial_name = @identity[:name].gsub!(/\W/,'|')
-        name_array = partial_name.split('|')
-        name_array.delete('')
-        sql_name_partial = name_array.collect {|partial_name| "INSTR(SUBSTR(SOUNDEX(concat('O',name)), 2), REPLACE(SUBSTR(SOUNDEX('O#{partial_name}'), 2), '0', '')) > 0"}.join(' and ')
-        sql_alt_name_partial = name_array.collect {|partial_name| "INSTR(SUBSTR(SOUNDEX(concat('O',alternate_identity_name)), 2), REPLACE(SUBSTR(SOUNDEX('O#{partial_name}'), 2), '0', '')) > 0"}.join(' and ')
-        ##this sql for getting "accurate sounds like" functionality comes from:
-        #http://jgeewax.wordpress.com/2006/07/21/efficient-sounds-like-searches-in-mysql/
-        possible_sdns = OfacSdn.connection.select_all("select concat(name,'|', alternate_identity_name) name, address, city
+      
+      #first get a list from the database of possible matches by name
+      #this query is pretty liberal, we just want to get a list of possible
+      #matches from the database that we can run through our ruby matching algorithm
+      partial_name = @identity[:name].gsub(/\W/,'|')
+      name_array = partial_name.split('|')
+      name_array.delete('')
+      sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
+      sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')
+      possible_sdns = OfacSdn.connection.select_all("select name, alternate_identity_name, address, city
                                 from ofac_sdns
                                 where name is not null
-                                and (((#{sql_name_partial}))
-                                or ((#{sql_alt_name_partial})))")
-      else
-        possible_sdns = OfacSdn.find(:all, :select => 'name, alternate_identity_name, address, city').collect{|sdn| {:name => "#{sdn.name}|#{sdn.alternate_identity_name}", :address => sdn.address, :city => sdn.city}}
-      end
-      
+                                and sdn_type = 'individual'
+                                and #{sql_name_partial}
+                                or #{sql_alt_name_partial}")
+      possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
+     
       match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
-                                  :address => {:weight => 10, :token => @identity[:address]},
-                                  :city => {:weight => 30, :token => @identity[:city]}})
+          :address => {:weight => 10, :token => @identity[:address]},
+          :city => {:weight => 30, :token => @identity[:city]}})
 
       score = match.score(possible_sdns)
       @possible_hits = match.possible_hits

@@ -22,6 +22,7 @@ class CreateOfacSdnTable < ActiveRecord::Migration
       t.string    :alternate_identity_remarks
       t.timestamps
     end
+    add_index :ofac_sdns, :sdn_type
   end
   
   def self.down
