@@ -15,7 +15,7 @@
 
 == 1.1.1 2009-05-13
 
-* 1 minor enhancement:
+* 2 minor changes:
   * Changed the sql in the initial search to do a like instead of a soundex.  For short names, the soundex returned almost the entire table
     making the process take too long.
   * Also changed the sql to only return individuals, also for the sake of performance.
