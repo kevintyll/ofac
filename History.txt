@@ -19,3 +19,8 @@
   * Changed the sql in the initial search to do a like instead of a soundex.  For short names, the soundex returned almost the entire table
     making the process take too long.
   * Also changed the sql to only return individuals, also for the sake of performance.
+
+== 1.1.3 2009-05-15
+
+* 1 bug fix:
+  * fixed a bug that threw an error is a space was passed in for the name.

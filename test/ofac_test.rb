@@ -10,6 +10,8 @@ class OfacTest < Test::Unit::TestCase
 
     should "give a score of 0 if no name is given" do
       assert_equal 0, Ofac.new({:address => '123 somewhere'}).score
+      assert_equal 0, Ofac.new({:name => ''}).score
+      assert_equal 0, Ofac.new({:name => ' '}).score
     end
 
     should "give a score of 0 if there is no name match" do

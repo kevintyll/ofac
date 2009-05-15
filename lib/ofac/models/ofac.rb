@@ -95,7 +95,7 @@ class Ofac
   end
 
   def calculate_score
-    unless @identity[:name].to_s == ''
+    unless @identity[:name].to_s.blank?
       
       #first get a list from the database of possible matches by name
       #this query is pretty liberal, we just want to get a list of possible
