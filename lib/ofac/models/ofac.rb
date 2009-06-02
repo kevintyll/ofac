@@ -102,7 +102,7 @@ class Ofac
       #matches from the database that we can run through our ruby matching algorithm
       partial_name = @identity[:name].gsub(/\W/,'|')
       name_array = partial_name.split('|')
-      name_array.delete('')
+      name_array.delete_if{|n| n.size < 2}
       sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
       sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')
       possible_sdns = OfacSdn.connection.select_all("select name, alternate_identity_name, address, city
