@@ -29,3 +29,8 @@
 
 * 1 minor enhancement:
   * Improved performance by ignoring initial in names when searching the database for possible hits.
+
+== 1.1.5 2009-06-03
+
+* 1 bug fix:
+  * fixed a bug that threw an error if only single character initials are passed in for the name.

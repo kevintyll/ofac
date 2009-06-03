@@ -103,22 +103,24 @@ class Ofac
       partial_name = @identity[:name].gsub(/\W/,'|')
       name_array = partial_name.split('|')
       name_array.delete_if{|n| n.size < 2}
-      sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
-      sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')
-      possible_sdns = OfacSdn.connection.select_all("select name, alternate_identity_name, address, city
+      unless name_array.empty?
+        sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
+        sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')
+        possible_sdns = OfacSdn.connection.select_all("select name, alternate_identity_name, address, city
                                 from ofac_sdns
                                 where name is not null
                                 and sdn_type = 'individual'
                                 and (#{sql_name_partial}
                                 or #{sql_alt_name_partial})")
-      possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
+        possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
      
-      match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
-          :address => {:weight => 10, :token => @identity[:address]},
-          :city => {:weight => 30, :token => @identity[:city]}})
+        match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
+            :address => {:weight => 10, :token => @identity[:address]},
+            :city => {:weight => 30, :token => @identity[:city]}})
 
-      score = match.score(possible_sdns)
-      @possible_hits = match.possible_hits
+        score = match.score(possible_sdns)
+        @possible_hits = match.possible_hits
+      end
     end
     @score = score || 0
     return @score
