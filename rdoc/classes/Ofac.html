@@ -132,6 +132,23 @@ If <tt>:name</tt> is missing, an error will not be thrown, but a <a
 href="Ofac.html#M000005">score</a> of 0 will be returned.
 </p>
 <p>
+You can pass a string in for the full name:
+</p>
+<pre>
+  Ofac.new(:name =&gt; 'Victor De La Garza')
+</pre>
+<p>
+Or you can specify the last and first names
+</p>
+<pre>
+  Ofac.new(:name =&gt; {:first_name =&gt; 'Victor', :last_name =&gt; 'De La Garza'})
+</pre>
+<p>
+The first method will build a larger list of names for ruby to parse
+through and more likely to find similar names. The second method is
+quicker.
+</p>
+<p>
 The more information provided, the higher the <a
 href="Ofac.html#M000005">score</a> could be. A <a
 href="Ofac.html#M000005">score</a> of 100 would mean all fields were passed
@@ -160,7 +177,7 @@ or marine vessel
             onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000004-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 19</span>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 28</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identity</span>)
     <span class="ruby-ivar">@identity</span> = <span class="ruby-identifier">identity</span>
   <span class="ruby-keyword kw">end</span>
@@ -196,7 +213,7 @@ returns
             onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000006-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 86</span>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 95</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">possible_hits</span>
     <span class="ruby-ivar">@possible_hits</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">retrieve_possible_hits</span>
   <span class="ruby-keyword kw">end</span>
@@ -321,7 +338,7 @@ as a hit.
             onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
           <div class="method-source-code" id="M000005-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 76</span>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 85</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">score</span>
     <span class="ruby-ivar">@score</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">calculate_score</span>
   <span class="ruby-keyword kw">end</span>

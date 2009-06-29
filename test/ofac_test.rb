@@ -25,6 +25,12 @@ class OfacTest < Test::Unit::TestCase
 
     should "give a score of 60 if there is a name match and deduct scores for non matches on address and city" do
       assert_equal 60, Ofac.new({:name => 'Oscar Hernandez'}).score
+      assert_equal 60, Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'Hernandez'}}).score
+    end
+
+    should "give a score of 30 if there is only a partial match" do
+      assert_equal 30, Ofac.new({:name => 'Oscar de la Hernandez'}).score
+      assert_equal 30, Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'de la Hernandez'}}).score
     end
 
     should "deduct scores for non matches on address and city if data is in the database" do

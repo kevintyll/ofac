@@ -7,6 +7,15 @@ class Ofac
   #
   # <tt>:name</tt> is required to get a score.  If <tt>:name</tt> is missing, an error will not be thrown, but a score of 0 will be returned.
   #
+  # You can pass a string in for the full name:
+  #   Ofac.new(:name => 'Victor De La Garza')
+  #
+  # Or you can specify the last and first names
+  #   Ofac.new(:name => {:first_name => 'Victor', :last_name => 'De La Garza'})
+  #
+  # The first method will build a larger list of names for ruby to parse through and more likely to find similar names.
+  # The second method is quicker.
+  #
   # The more information provided, the higher the score could be.  A score of 100 would mean all fields
   # were passed in, and all fields were 100% matches.  If only the name is passed in without an address,
   # it will be impossible to get a score of 100, even if the name matches perfectly.
@@ -100,8 +109,15 @@ class Ofac
       #first get a list from the database of possible matches by name
       #this query is pretty liberal, we just want to get a list of possible
       #matches from the database that we can run through our ruby matching algorithm
-      partial_name = @identity[:name].gsub(/\W/,'|')
-      name_array = partial_name.split('|')
+
+      #you can pass in a full name, or specify the first and last name
+      if @identity[:name].kind_of?(Hash)
+        name_array = [@identity[:name][:first_name],@identity[:name][:last_name]]
+      else
+        partial_name = @identity[:name].gsub(/\W/,'|')
+        name_array = partial_name.split('|')
+      end
+
       name_array.delete_if{|n| n.size < 2}
       unless name_array.empty?
         sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
@@ -114,7 +130,7 @@ class Ofac
                                 or #{sql_alt_name_partial})")
         possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
      
-        match = OfacMatch.new({:name => {:weight => 60, :token => "#{@identity[:name]}"},
+        match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(' ')}"},
             :address => {:weight => 10, :token => @identity[:address]},
             :city => {:weight => 30, :token => @identity[:city]}})
 

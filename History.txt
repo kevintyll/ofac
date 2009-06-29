@@ -34,3 +34,8 @@
 
 * 1 bug fix:
   * fixed a bug that threw an error if only single character initials are passed in for the name.
+
+== 1.1.6 2009-06-29
+
+* 1 minor enhancement:
+  * Allow passing of first and last name seperately...to improve performance.
