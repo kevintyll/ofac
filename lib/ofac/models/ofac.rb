@@ -120,14 +120,13 @@ class Ofac
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
-        sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')
-        possible_sdns = OfacSdn.connection.select_all("select name, alternate_identity_name, address, city
-                                from ofac_sdns
-                                where name is not null
-                                and sdn_type = 'individual'
-                                and (#{sql_name_partial}
-                                or #{sql_alt_name_partial})")
+        sql_name_partial = name_array.collect {|partial_name| ["name like ?", "%#{partial_name}%"]}
+        sql_alt_name_partial = name_array.collect {|partial_name| ["alternate_identity_name like ?", "%#{partial_name}%"]}
+        conditions = sql_name_partial + sql_alt_name_partial
+        conditions = conditions.transpose
+        conditions = [conditions.first.join(' or ')] + conditions.second
+
+        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
         possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
      
         match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(' ')}"},

@@ -44,3 +44,9 @@
 
 * 1 bug fix:
   * fixed error when passing a nil value into the new :first_name or :last_name hash values when initializing the Ofac object.
+
+== 1.1.8 2009-06-30
+
+* 1 bug fix:
+  * Refactored the select on OfacSdn to use the AR connection instead of building sql and using the raw connection.  Fixes a bug
+    introducted in 1.1.6 where quotes in the name raised an error.

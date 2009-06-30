@@ -20,6 +20,8 @@ class OfacTest < Test::Unit::TestCase
 
     should "give a score of 0 if there is no name match" do
       assert_equal 0, Ofac.new({:name => 'Kevin T P'}).score
+      assert_equal 0, Ofac.new({:name => "O'Brian"}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => 'Matthew',:last_name => "O'Brian"}}).score
     end
 
     should "give a score of 0 if there is no name match but there is an address and city match" do
