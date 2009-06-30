@@ -112,13 +112,13 @@ class Ofac
 
       #you can pass in a full name, or specify the first and last name
       if @identity[:name].kind_of?(Hash)
-        name_array = [@identity[:name][:first_name],@identity[:name][:last_name]]
+        name_array = [@identity[:name][:first_name],@identity[:name][:last_name]].compact
       else
         partial_name = @identity[:name].gsub(/\W/,'|')
         name_array = partial_name.split('|')
       end
 
-      name_array.delete_if{|n| n.size < 2}
+      name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
         sql_name_partial = name_array.collect {|partial_name| "name like '%#{partial_name}%'"}.join(' or ')
         sql_alt_name_partial = name_array.collect {|partial_name| "alternate_identity_name like '%#{partial_name}%'"}.join(' or ')

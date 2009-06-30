@@ -12,6 +12,9 @@ class OfacTest < Test::Unit::TestCase
       assert_equal 0, Ofac.new({:address => '123 somewhere'}).score
       assert_equal 0, Ofac.new({:name => ''}).score
       assert_equal 0, Ofac.new({:name => ' '}).score
+      assert_equal 0, Ofac.new({:name => nil}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => '',:last_name => ' '}}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => '',:last_name => '  '}}).score
       assert_equal 0, Ofac.new({:name => 'P T'}).score
     end
 
@@ -31,6 +34,15 @@ class OfacTest < Test::Unit::TestCase
     should "give a score of 30 if there is only a partial match" do
       assert_equal 30, Ofac.new({:name => 'Oscar de la Hernandez'}).score
       assert_equal 30, Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'de la Hernandez'}}).score
+    end
+
+    should "handle first or last name not given" do
+      assert_equal 60, Ofac.new({:name => {:first_name => 'Oscar', :last_name => ''}}).score
+      assert_equal 60, Ofac.new({:name => {:first_name => 'Oscar', :last_name => nil}}).score
+      assert_equal 60, Ofac.new({:name => {:first_name => nil, :last_name => 'Oscar'}}).score
+      assert_equal 60, Ofac.new({:name => {:first_name => 'Oscar'}}).score
+      assert_equal 60, Ofac.new({:name => {:first_name => '', :last_name => 'Oscar'}}).score
+      assert_equal 60, Ofac.new({:name => {:last_name => 'Oscar'}}).score
     end
 
     should "deduct scores for non matches on address and city if data is in the database" do
