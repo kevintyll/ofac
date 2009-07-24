@@ -50,3 +50,10 @@
 * 1 bug fix:
   * Refactored the select on OfacSdn to use the AR connection instead of building sql and using the raw connection.  Fixes a bug
     introducted in 1.1.6 where quotes in the name raised an error.
+
+== 1.1.9 2009-07-24
+
+* 1 minor enhancement:
+  * Added a method, db_hit? for when your more concerned with speed than accuracy.  db_hit? will retun true if there is an exact name match
+    in the ofac_sdn database.  This method ignores address and city and does not produce a score.
+    Usage: Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).db_hit?

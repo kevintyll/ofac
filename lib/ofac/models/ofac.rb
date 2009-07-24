@@ -86,6 +86,35 @@ class Ofac
     @score || calculate_score
   end
 
+  def db_hit?
+    unless @identity[:name].to_s.blank?
+
+      #first get a list from the database of possible matches by name
+      #this query is pretty liberal, we just want to get a list of possible
+      #matches from the database that we can run through our ruby matching algorithm
+      possible_sdns = []
+      name_array = process_name
+
+      name_array.delete_if{|n| n.strip.size < 2}
+      unless name_array.empty?
+        sql_name_partial = name_array.collect {|partial_name| ["name like ?", "%#{partial_name}%"]}
+        sql_alt_name_partial = name_array.collect {|partial_name| ["alternate_identity_name like ?", "%#{partial_name}%"]}
+        
+        name_conditions = sql_name_partial.transpose
+        name_values = name_conditions.second
+        name_conditions = [name_conditions.first.join(' and ')]
+        alt_name_conditions = sql_alt_name_partial.transpose
+        alt_name_values = alt_name_conditions.second
+        alt_name_conditions = [alt_name_conditions.first.join(' and ')]
+        conditions = ["(#{name_conditions}) or (#{alt_name_conditions})"] + name_values + alt_name_values
+
+        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
+        
+      end
+    end
+    !possible_sdns.empty?
+  end
+
   # Returns an array of hashes of records in the OFAC data that found partial matches with that record's score.
   # 
   #     Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).possible_hits
@@ -110,13 +139,7 @@ class Ofac
       #this query is pretty liberal, we just want to get a list of possible
       #matches from the database that we can run through our ruby matching algorithm
 
-      #you can pass in a full name, or specify the first and last name
-      if @identity[:name].kind_of?(Hash)
-        name_array = [@identity[:name][:first_name],@identity[:name][:last_name]].compact
-      else
-        partial_name = @identity[:name].gsub(/\W/,'|')
-        name_array = partial_name.split('|')
-      end
+      name_array = process_name
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
@@ -139,6 +162,16 @@ class Ofac
     end
     @score = score || 0
     return @score
+  end
+
+  def process_name
+    #you can pass in a full name, or specify the first and last name
+    if @identity[:name].kind_of?(Hash)
+      name_array = [@identity[:name][:first_name],@identity[:name][:last_name]].compact
+    else
+      partial_name = @identity[:name].gsub(/\W/,'|')
+      name_array = partial_name.split('|')
+    end
   end
 
 end

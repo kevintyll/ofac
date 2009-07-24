@@ -102,7 +102,7 @@ class OfacTest < Test::Unit::TestCase
     end
 
     should "return an array of possible hits" do
-      #it should matter which order you call score or possible hits.
+      #it should not matter which order you call score or possible hits.
       sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
       assert sdn.score > 0
       assert !sdn.possible_hits.empty?
@@ -110,6 +110,36 @@ class OfacTest < Test::Unit::TestCase
       sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
       assert !sdn.possible_hits.empty?
       assert sdn.score > 0
+    end
+
+    should "db_hit? should return true if name is an exact match in the database" do
+      
+      sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+      assert sdn.db_hit?
+
+      sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+      assert sdn.db_hit?
+
+      #single initials are ignored
+      sdn = Ofac.new({:name => 'Oscar M Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+      assert sdn.db_hit?
+
+      #city and address are ignored
+      sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'bad city', :address => 'bad address'})
+      assert sdn.db_hit?
+    end
+
+    should "db_hit? should return false if name is not an exact match in the database" do
+
+      sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'de la Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+      assert !sdn.db_hit?
+
+      sdn = Ofac.new({:name => 'Oscar Maria Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+      assert !sdn.db_hit?
+
+      #city and address are ignored
+      sdn = Ofac.new({:name => 'Oscar de la Hernandez', :city => 'bad city', :address => 'bad address'})
+      assert !sdn.db_hit?
     end
   end
 end

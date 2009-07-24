@@ -86,8 +86,9 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
+      <a href="#M000006">db_hit?</a>&nbsp;&nbsp;
       <a href="#M000004">new</a>&nbsp;&nbsp;
-      <a href="#M000006">possible_hits</a>&nbsp;&nbsp;
+      <a href="#M000007">possible_hits</a>&nbsp;&nbsp;
       <a href="#M000005">score</a>&nbsp;&nbsp;
       </div>
     </div>
@@ -193,6 +194,54 @@ or marine vessel
 
         <div class="method-heading">
           <a href="#M000006" class="method-signature">
+          <span class="method-name">db_hit?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 89</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_hit?</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@identity</span>[<span class="ruby-identifier">:name</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">blank?</span>
+
+      <span class="ruby-comment cmt">#first get a list from the database of possible matches by name</span>
+      <span class="ruby-comment cmt">#this query is pretty liberal, we just want to get a list of possible</span>
+      <span class="ruby-comment cmt">#matches from the database that we can run through our ruby matching algorithm</span>
+      <span class="ruby-identifier">possible_sdns</span> = []
+      <span class="ruby-identifier">name_array</span> = <span class="ruby-identifier">process_name</span>
+
+      <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">delete_if</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>}
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-identifier">sql_name_partial</span> = <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">partial_name</span><span class="ruby-operator">|</span> [<span class="ruby-value str">&quot;name like ?&quot;</span>, <span class="ruby-node">&quot;%#{partial_name}%&quot;</span>]}
+        <span class="ruby-identifier">sql_alt_name_partial</span> = <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">partial_name</span><span class="ruby-operator">|</span> [<span class="ruby-value str">&quot;alternate_identity_name like ?&quot;</span>, <span class="ruby-node">&quot;%#{partial_name}%&quot;</span>]}
+        
+        <span class="ruby-identifier">name_conditions</span> = <span class="ruby-identifier">sql_name_partial</span>.<span class="ruby-identifier">transpose</span>
+        <span class="ruby-identifier">name_values</span> = <span class="ruby-identifier">name_conditions</span>.<span class="ruby-identifier">second</span>
+        <span class="ruby-identifier">name_conditions</span> = [<span class="ruby-identifier">name_conditions</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' and '</span>)]
+        <span class="ruby-identifier">alt_name_conditions</span> = <span class="ruby-identifier">sql_alt_name_partial</span>.<span class="ruby-identifier">transpose</span>
+        <span class="ruby-identifier">alt_name_values</span> = <span class="ruby-identifier">alt_name_conditions</span>.<span class="ruby-identifier">second</span>
+        <span class="ruby-identifier">alt_name_conditions</span> = [<span class="ruby-identifier">alt_name_conditions</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' and '</span>)]
+        <span class="ruby-identifier">conditions</span> = [<span class="ruby-node">&quot;(#{name_conditions}) or (#{alt_name_conditions})&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">name_values</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">alt_name_values</span>
+
+        <span class="ruby-identifier">possible_sdns</span> = <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">find_all_by_sdn_type</span>(<span class="ruby-value str">'individual'</span>,<span class="ruby-identifier">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'name, alternate_identity_name, address, city'</span>, <span class="ruby-identifier">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>)
+        
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-operator">!</span><span class="ruby-identifier">possible_sdns</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
+
+        <div class="method-heading">
+          <a href="#M000007" class="method-signature">
           <span class="method-name">possible_hits</span><span class="method-args">()</span>
           </a>
         </div>
@@ -210,10 +259,10 @@ returns
      [{:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|GUAMATUR, S.A.&quot;, :city=&gt;&quot;Clearwater&quot;}, {:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|Alternate Name&quot;, :city=&gt;&quot;Clearwater&quot;}]
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000006-source">
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
 <pre>
-<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 95</span>
+<span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 124</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">possible_hits</span>
     <span class="ruby-ivar">@possible_hits</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">retrieve_possible_hits</span>
   <span class="ruby-keyword kw">end</span>
