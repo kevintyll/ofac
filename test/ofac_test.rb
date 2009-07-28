@@ -22,9 +22,6 @@ class OfacTest < Test::Unit::TestCase
       assert_equal 0, Ofac.new({:name => 'Kevin T P'}).score
       assert_equal 0, Ofac.new({:name => "O'Brian"}).score
       assert_equal 0, Ofac.new({:name => {:first_name => 'Matthew',:last_name => "O'Brian"}}).score
-    end
-
-    should "give a score of 0 if there is no name match but there is an address and city match" do
       assert_equal 0, Ofac.new({:name => 'Kevin', :address => '123 somewhere ln', :city => 'Clearwater'}).score
     end
 
@@ -47,19 +44,15 @@ class OfacTest < Test::Unit::TestCase
       assert_equal 60, Ofac.new({:name => {:last_name => 'Oscar'}}).score
     end
 
-    should "deduct scores for non matches on address and city if data is in the database" do
+    should "deduct scores for non matches on address if data is in the database" do
       #if there is data for address or city in the database, and that info is passed in, then 10%
-      #of the weight will be deducted if there is not match or sounds like match
+      #of the weight will be deducted if there is no match or sounds like match
 
-      #only name matches
-      assert_equal 56, Ofac.new({:name => 'Oscar Hernandez', :city => 'no match', :address => 'no match'}).score
-      #only name matches
-      assert_equal 56, Ofac.new({:name => 'Oscar Hernandez', :city => 'Las Vegas', :address => 'no match'}).score
       #name and city match
       assert_equal 89, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => 'no match'}).score
-      #city is a partial match - Clearwater matches, but not Bay
-      #score = 60 for name + 15 for Clearwater - (15 * .1) for Bay = 73.5
-      assert_equal 74, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater Bay'}).score
+      #the record is pulled because clear is like clearwater, but it's not a match
+      #score = 60 for name  - (30 * .1) for Clear = 57
+      assert_equal 57, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clear'}).score
     end
 
     should "not deduct from score if no data for city or address is in the database" do
@@ -78,6 +71,20 @@ class OfacTest < Test::Unit::TestCase
 
     should "give a score of 90 if there is a name and city match" do
       assert_equal 90, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater'}).score
+    end
+
+    should "not find a match if the city does not match" do
+      assert_equal 0, Ofac.new({:name => 'Oscar Hernandez', :city => 'Tampa'}).score
+      #only name matches
+      assert_equal 0, Ofac.new({:name => 'Oscar Hernandez', :city => 'no match', :address => 'no match'}).score
+    end
+
+    should "find a match if the city is not passed in" do
+      assert_equal 60, Ofac.new({:name => 'Oscar Hernandez'}).score
+    end
+
+    should "find a match if the city is not in the database" do
+      assert_equal 60, Ofac.new({:name => 'Raul AGUIAR'}).score
     end
 
     should "give a score of 100 if there is a name and city and address match" do
@@ -141,5 +148,6 @@ class OfacTest < Test::Unit::TestCase
       sdn = Ofac.new({:name => 'Oscar de la Hernandez', :city => 'bad city', :address => 'bad address'})
       assert !sdn.db_hit?
     end
+
   end
 end
