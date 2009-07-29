@@ -11,7 +11,7 @@ class OfacMatch
   #        :zip    => {:weight => 10, :token => '33759', :type => :number}})
   #
   # data hash keys:
-  #   * <tt>data[:weight]</tt> - value to apply to the score if there is a match (Default is 100/number of key in the record hash)
+  #   * <tt>data[:weight]</tt> - value to apply to the score if there is a match (Default is 100/number of keys in the record hash)
   #   * <tt>data[:token]</tt> - string to match
   #   * <tt>data[:match]</tt> - set from records hash
   #   * <tt>data[:score]</tt> - output field
@@ -79,12 +79,20 @@ class OfacMatch
               value = data[:token] == data[:match] ? 1 : 0
             else
               #first see if there is an exact match
-              value = data[:token] == data[:match] ? 1 : 0
+              value = data[:match].split('|').include?(data[:token]) ? 1 : 0
 
               unless value > 0
                 #do a sounds like with the data as given to see if we get a match
                 #if match on sounds_like, only give .75 of the weight.
-                value = data[:token].ofac_sounds_like(data[:match],false) ? 0.75 : 0
+                data[:match].split('|').each do |separate_value|
+                  if data[:token].ofac_sounds_like(separate_value,false)
+                    value = 0.75
+                    break
+                  else
+                    value = 0
+                  end
+                end
+
               end
                 
               #if no match, then break the data down and see if we can find matches on the
@@ -105,16 +113,6 @@ class OfacMatch
                   #first see if we get an exact match of the partial
                   if success = match_array.include?(partial_token)
                     value += partial_weight
-                  else
-                    #otherwise, see if the partial sounds like any part of the OFAC record
-                    match_array.each do |partial_match|
-                      if partial_match.ofac_sounds_like(partial_token,false)
-                        #give partial value for every part of token that is matched.
-                        value += partial_weight * 0.75
-                        success = true
-                        break
-                      end
-                    end
                   end
                   unless success
                     #if this for :address or :city

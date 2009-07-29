@@ -73,20 +73,6 @@ class OfacTest < Test::Unit::TestCase
       assert_equal 90, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater'}).score
     end
 
-    should "not find a match if the city does not match" do
-      assert_equal 0, Ofac.new({:name => 'Oscar Hernandez', :city => 'Tampa'}).score
-      #only name matches
-      assert_equal 0, Ofac.new({:name => 'Oscar Hernandez', :city => 'no match', :address => 'no match'}).score
-    end
-
-    should "find a match if the city is not passed in" do
-      assert_equal 60, Ofac.new({:name => 'Oscar Hernandez'}).score
-    end
-
-    should "find a match if the city is not in the database" do
-      assert_equal 60, Ofac.new({:name => 'Raul AGUIAR'}).score
-    end
-
     should "give a score of 100 if there is a name and city and address match" do
       assert_equal 100, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).score
     end
@@ -96,16 +82,15 @@ class OfacTest < Test::Unit::TestCase
       #32456 summer lane sounds like 32456 Somewhere ln so is adds 75% of the address weight to the score, or 8.
       assert_equal 98, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '32456 summer lane'}).score
 
-      #summer sounds like somewhere, and all numbers sound alike, so 2 of the 3 address elements match by sound.
-      #Each element is worth 10\3 or 3.33.  Exact matches add 2.33 each, and the sounds like adds 2.33 * .75 or 2.5
-      #because sounds like matches only add 75% of it's weight.
-      #2.5 + 2.5 = 5
-      assert_equal 95, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '12358 summer blvd'}).score
+      #Louis Eduardo Lopez Mendez sounds like Luis Eduardo Lopez Mendez:
+      #:name has a weight of 60, so a sounds like is worth 45
+      assert_equal 45, Ofac.new({:name => {:first_name => 'Louis Eduardo', :last_name => 'Lopez Mendez'}, :city => 'Las Vegas', :address => 'no match'}).score
+    end
 
-
-      #Louis sounds like Luis, and Lopez is an exact match:
-      #:name has a weight of 60, so each element is worth 30.  A sounds like match is worth 30 * .75
-      assert_equal 53, Ofac.new({:name => 'Louis Lopez', :city => 'Las Vegas', :address => 'no match'}).score
+    should 'not give partial scores if sounds like does not match the entire string' do
+      #summer sounds like somewhere, and all numbers sound alike, so 2 of the 3 address elements match by sound
+      #but the whole thing does not make a sounds like match so only city matches, subtract 1 for no address match
+      assert_equal 89, Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '12358 summer blvd'}).score
     end
 
     should "return an array of possible hits" do

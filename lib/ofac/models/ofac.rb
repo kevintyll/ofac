@@ -147,20 +147,12 @@ class Ofac
         sql_alt_name_partial = name_array.collect {|partial_name| ["alternate_identity_name like ?", "%#{partial_name}%"]}
         conditions = sql_name_partial + sql_alt_name_partial
         conditions = conditions.transpose
-        unless @identity[:city].blank?
-          city_condition = ' and (city like ? or city is null)'
-        end
-        name_values = conditions.second
-        conditions = conditions.first.join(' or ')
-        conditions = "(#{conditions})"
-        conditions += city_condition if city_condition
-        condition_array = [conditions] + name_values
-        condition_array += ["%#{@identity[:city]}%"] if city_condition
-        
-        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => condition_array)
+        conditions = [conditions.first.join(' or ')] + conditions.second
+
+        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
         possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
      
-        match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(' ')}"},
+        match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(', ')}"},
             :address => {:weight => 10, :token => @identity[:address]},
             :city => {:weight => 30, :token => @identity[:city]}})
 
@@ -175,10 +167,10 @@ class Ofac
   def process_name
     #you can pass in a full name, or specify the first and last name
     if @identity[:name].kind_of?(Hash)
-      name_array = [@identity[:name][:first_name],@identity[:name][:last_name]].compact
+      name_array = [@identity[:name][:last_name],@identity[:name][:first_name]].compact
     else
       partial_name = @identity[:name].gsub(/\W/,'|')
-      name_array = partial_name.split('|')
+      name_array = partial_name.split('|').reverse
     end
   end
 
