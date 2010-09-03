@@ -1,55 +1,20 @@
-== 0.1.0 2009-05-7
-
-* 1 major enhancement:
-  * Table creation and data load task complete
-
-== 1.0.0 2009-05-11
-
-* 1 major enhancement:
-  * Initail release
-
-== 1.1.0 2009-05-12
+== 1.1.12 2010-09-03
 
 * 1 minor enhancement:
-  * Modified the match alogorithm to reduct the score if there is not an address or city match if the data is in the database.
+  * Changed the method to load the rake tasks from import to load to be jruby friendly.
 
-== 1.1.2 2009-05-13
-
-* 2 minor changes:
-  * Changed the sql in the initial search to do a like instead of a soundex.  For short names, the soundex returned almost the entire table
-    making the process take too long.
-  * Also changed the sql to only return individuals, also for the sake of performance.
-
-== 1.1.3 2009-05-15
-
-* 1 bug fix:
-  * fixed a bug that threw an error if a space was passed in for the name.
-
-== 1.1.4 2009-06-02
+== 1.1.11 2009-07-29
 
 * 1 minor enhancement:
-  * Improved performance by ignoring initial in names when searching the database for possible hits.
+  * Removed the changes from 1.1.10.  1.1.10 produced a score of 0 when a higher score was more accurate.
+    Changed the scoring algorithm to not include partial matches on sounds like.  This code has little impact on score, and
+    has a very high overhead on performance.
 
-== 1.1.5 2009-06-03
-
-* 1 bug fix:
-  * fixed a bug that threw an error if only single character initials are passed in for the name.
-
-== 1.1.6 2009-06-29
+== 1.1.10 2009-07-28
 
 * 1 minor enhancement:
-  * Allow passing of first and last name seperately...to improve performance.
-
-== 1.1.7 2009-06-30
-
-* 1 bug fix:
-  * fixed error when passing a nil value into the new :first_name or :last_name hash values when initializing the Ofac object.
-
-== 1.1.8 2009-06-30
-
-* 1 bug fix:
-  * Refactored the select on OfacSdn to use the AR connection instead of building sql and using the raw connection.  Fixes a bug
-    introducted in 1.1.6 where quotes in the name raised an error.
+  * Modified the select in OfacSdn to use the city to pull records from the database.  This is another compromise to improve performance,
+    but still get a score.  The db_hit? method is still faster, but this will still calculate a score for accuracy.
 
 == 1.1.9 2009-07-24
 
@@ -58,15 +23,59 @@
     in the ofac_sdn database.  This method ignores address and city and does not produce a score.
     Usage: Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).db_hit?
 
-== 1.1.10 2009-07-28
+
+== 1.1.8 2009-06-30
+
+* 1 bug fix:
+  * Refactored the select on OfacSdn to use the AR connection instead of building sql and using the raw connection.  Fixes a bug
+    introducted in 1.1.6 where quotes in the name raised an error.
+
+
+== 1.1.7 2009-06-30
+
+* 1 bug fix:
+  * fixed error when passing a nil value into the new :first_name or :last_name hash values when initializing the Ofac object.
+
+== 1.1.6 2009-06-29
 
 * 1 minor enhancement:
-  * Modified the select in OfacSdn to use the city to pull records from the database.  This is another compromise to improve performance,
-    but still get a score.  The db_hit? method is still faster, but this will still calculate a score for accuracy.
+  * Allow passing of first and last name seperately...to improve performance.
 
-== 1.1.11 2009-07-29
+
+== 1.1.5 2009-06-03
+
+* 1 bug fix:
+  * fixed a bug that threw an error if only single character initials are passed in for the name.
+
+== 1.1.4 2009-06-02
 
 * 1 minor enhancement:
-  * Removed the changes from 1.1.10.  1.1.10 produced a score of 0 when a higher score was more accurate.
-    Changed the scoring algorithm to not include partial matches on sounds like.  This code has little impact on score, and
-    has a very high overhead on performance.
+  * Improved performance by ignoring initial in names when searching the database for possible hits.
+
+== 1.1.3 2009-05-15
+
+* 1 bug fix:
+  * fixed a bug that threw an error if a space was passed in for the name.
+
+== 1.1.2 2009-05-13
+
+* 2 minor changes:
+  * Changed the sql in the initial search to do a like instead of a soundex.  For short names, the soundex returned almost the entire table
+    making the process take too long.
+  * Also changed the sql to only return individuals, also for the sake of performance.
+
+== 1.1.0 2009-05-12
+
+* 1 minor enhancement:
+  * Modified the match alogorithm to reduct the score if there is not an address or city match if the data is in the database.
+
+
+== 1.0.0 2009-05-11
+
+* 1 major enhancement:
+  * Initail release
+
+== 0.1.0 2009-05-7
+
+* 1 major enhancement:
+  * Table creation and data load task complete
