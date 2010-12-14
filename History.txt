@@ -1,3 +1,9 @@
+== 1.2.0 2010-12-14
+
+* 1 enhancement:
+  * The url to download the sdn file changed.  Modified the loader so it will not truncate the table
+    if it does not get a good file.
+
 == 1.1.12 2010-09-03
 
 * 1 minor enhancement:

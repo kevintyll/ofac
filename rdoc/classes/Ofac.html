@@ -86,10 +86,10 @@
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000006">db_hit?</a>&nbsp;&nbsp;
-      <a href="#M000004">new</a>&nbsp;&nbsp;
-      <a href="#M000007">possible_hits</a>&nbsp;&nbsp;
-      <a href="#M000005">score</a>&nbsp;&nbsp;
+      <a href="#M000007">db_hit?</a>&nbsp;&nbsp;
+      <a href="#M000005">new</a>&nbsp;&nbsp;
+      <a href="#M000008">possible_hits</a>&nbsp;&nbsp;
+      <a href="#M000006">score</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -111,11 +111,11 @@
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000004" class="method-detail">
-        <a name="M000004"></a>
+      <div id="method-M000005" class="method-detail">
+        <a name="M000005"></a>
 
         <div class="method-heading">
-          <a href="#M000004" class="method-signature">
+          <a href="#M000005" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(identity)</span>
           </a>
         </div>
@@ -128,9 +128,9 @@ Accepts a hash with the identity&#8216;s demographic information
   Ofac.new({:name =&gt; 'Oscar Hernandez', :city =&gt; 'Clearwater', :address =&gt; '123 somewhere ln'})
 </pre>
 <p>
-<tt>:name</tt> is required to get a <a href="Ofac.html#M000005">score</a>.
+<tt>:name</tt> is required to get a <a href="Ofac.html#M000006">score</a>.
 If <tt>:name</tt> is missing, an error will not be thrown, but a <a
-href="Ofac.html#M000005">score</a> of 0 will be returned.
+href="Ofac.html#M000006">score</a> of 0 will be returned.
 </p>
 <p>
 You can pass a string in for the full name:
@@ -151,16 +151,16 @@ quicker.
 </p>
 <p>
 The more information provided, the higher the <a
-href="Ofac.html#M000005">score</a> could be. A <a
-href="Ofac.html#M000005">score</a> of 100 would mean all fields were passed
+href="Ofac.html#M000006">score</a> could be. A <a
+href="Ofac.html#M000006">score</a> of 100 would mean all fields were passed
 in, and all fields were 100% matches. If only the name is passed in without
 an address, it will be impossible to get a <a
-href="Ofac.html#M000005">score</a> of 100, even if the name matches
+href="Ofac.html#M000006">score</a> of 100, even if the name matches
 perfectly.
 </p>
 <p>
 Acceptable hash keys and their weighting in <a
-href="Ofac.html#M000005">score</a> calculation:
+href="Ofac.html#M000006">score</a> calculation:
 </p>
 <ul>
 <li><tt>:name</tt> (weighting = 60%) (required) This can be a person, business,
@@ -175,8 +175,8 @@ or marine vessel
 </li>
 </ul>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000004-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000004-source">
+            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000005-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 28</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">identity</span>)
@@ -189,19 +189,19 @@ or marine vessel
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000006" class="method-detail">
-        <a name="M000006"></a>
+      <div id="method-M000007" class="method-detail">
+        <a name="M000007"></a>
 
         <div class="method-heading">
-          <a href="#M000006" class="method-signature">
+          <a href="#M000007" class="method-signature">
           <span class="method-name">db_hit?</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000006-source">
+            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000007-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 89</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">db_hit?</span>
@@ -237,11 +237,11 @@ or marine vessel
         </div>
       </div>
 
-      <div id="method-M000007" class="method-detail">
-        <a name="M000007"></a>
+      <div id="method-M000008" class="method-detail">
+        <a name="M000008"></a>
 
         <div class="method-heading">
-          <a href="#M000007" class="method-signature">
+          <a href="#M000008" class="method-signature">
           <span class="method-name">possible_hits</span><span class="method-args">()</span>
           </a>
         </div>
@@ -259,8 +259,8 @@ returns
      [{:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|GUAMATUR, S.A.&quot;, :city=&gt;&quot;Clearwater&quot;}, {:address=&gt;&quot;123 Somewhere Ln&quot;, :score=&gt;100, :name=&gt;&quot;HERNANDEZ, Oscar|Alternate Name&quot;, :city=&gt;&quot;Clearwater&quot;}]
 </pre>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000007-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000007-source">
+            onclick="toggleCode('M000008-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000008-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 124</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">possible_hits</span>
@@ -271,30 +271,30 @@ returns
         </div>
       </div>
 
-      <div id="method-M000005" class="method-detail">
-        <a name="M000005"></a>
+      <div id="method-M000006" class="method-detail">
+        <a name="M000006"></a>
 
         <div class="method-heading">
-          <a href="#M000005" class="method-signature">
+          <a href="#M000006" class="method-signature">
           <span class="method-name">score</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
-Creates a <a href="Ofac.html#M000005">score</a>, 1 - 100, based on how well
+Creates a <a href="Ofac.html#M000006">score</a>, 1 - 100, based on how well
 the name and address match the data on the SDN (Specially Designated
 Nationals) list.
 </p>
 <p>
-The <a href="Ofac.html#M000005">score</a> is calculated by adding up the
+The <a href="Ofac.html#M000006">score</a> is calculated by adding up the
 weightings of each part that is matched. So if only name is matched, then
-the max <a href="Ofac.html#M000005">score</a> is the weight for
+the max <a href="Ofac.html#M000006">score</a> is the weight for
 <tt>:name</tt> which is 60
 </p>
 <p>
 It&#8216;s possible to get partial matches, which will add partial weight
-to the <a href="Ofac.html#M000005">score</a>. If there is not a match on
+to the <a href="Ofac.html#M000006">score</a>. If there is not a match on
 the element as it is passed in, then each word element gets broken down and
 matches are tried on each partial element. The weighting is distrubuted
 equally for each partial that is matched.
@@ -302,7 +302,7 @@ equally for each partial that is matched.
 <p>
 If exact matches are not made, then a sounds like match is attempted. Any
 match made by sounds like is given 75% of it&#8216;s weight to the <a
-href="Ofac.html#M000005">score</a>.
+href="Ofac.html#M000006">score</a>.
 </p>
 <p>
 Example:
@@ -312,27 +312,27 @@ If you are trying to match the name Kevin Tyll and there is a record for
 Smith, Kevin in the database, then we will try to match both Kevin and Tyll
 separately, with each element Smith and Kevin. Since only Kevin will find a
 match, and there were 2 elements in the searched name, the <a
-href="Ofac.html#M000005">score</a> will be added by half the weighting for
+href="Ofac.html#M000006">score</a> will be added by half the weighting for
 <tt>:name</tt>. So since the weight for <tt>:name</tt> is 60, then we will
-add 30 to the <a href="Ofac.html#M000005">score</a>.
+add 30 to the <a href="Ofac.html#M000006">score</a>.
 </p>
 <p>
 If you are trying to match the name Kevin Gregory Tyll and there is a
 record for Tyll, Kevin in the database, then we will try to match Kevin and
 Gregory and Tyll separately, with each element Tyll and Kevin. Since both
 Kevin and Tyll will find a match, and there were 3 elements in the searched
-name, the <a href="Ofac.html#M000005">score</a> will be added by 2/3 the
+name, the <a href="Ofac.html#M000006">score</a> will be added by 2/3 the
 weighting for <tt>:name</tt>. So since the weight for <tt>:name</tt> is 60,
-then we will add 40 to the <a href="Ofac.html#M000005">score</a>.
+then we will add 40 to the <a href="Ofac.html#M000006">score</a>.
 </p>
 <p>
 If you are trying to match the name Kevin Tyll and there is a record for
 Kevin Gregory Tyll in the database, then we will try to match Kevin and
 Tyll separately, with each element Tyll and Kevin and Gregory. Since both
 Kevin and Tyll will find a match, and there were 2 elements in the searched
-name, the <a href="Ofac.html#M000005">score</a> will be added by 2/2 the
+name, the <a href="Ofac.html#M000006">score</a> will be added by 2/2 the
 weighting for <tt>:name</tt>. So since the weight for <tt>:name</tt> is 60,
-then we will add 60 to the <a href="Ofac.html#M000005">score</a>.
+then we will add 60 to the <a href="Ofac.html#M000006">score</a>.
 </p>
 <p>
 If you are trying to match the name Kevin Tyll, and there is a record for
@@ -345,16 +345,16 @@ since Tyll was a sounds like match, it will add 30 * .75. So the
 </p>
 <p>
 If data is in the database for city and or address, and you pass data in
-for these elements, the <a href="Ofac.html#M000005">score</a> will be
+for these elements, the <a href="Ofac.html#M000006">score</a> will be
 reduced by 10% of the weight if there is no match or sounds like match. So
 if you get a match on name, you&#8216;ve already got a <a
-href="Ofac.html#M000005">score</a> of 60. So if you don&#8216;t pass in an
+href="Ofac.html#M000006">score</a> of 60. So if you don&#8216;t pass in an
 address or city, or if you do, but there is no city or address info in the
-database, then your final <a href="Ofac.html#M000005">score</a> will be 60.
+database, then your final <a href="Ofac.html#M000006">score</a> will be 60.
 But if you do pass in a city, say Tampa, and the city in the Database is
 New York, then we will deduct 10% of the weight (30 * .1) = 3 from the <a
-href="Ofac.html#M000005">score</a> since 30 is the weight for
-<tt>:city</tt>. So the final <a href="Ofac.html#M000005">score</a> will be
+href="Ofac.html#M000006">score</a> since 30 is the weight for
+<tt>:city</tt>. So the final <a href="Ofac.html#M000006">score</a> will be
 57.
 </p>
 <p>
@@ -362,13 +362,13 @@ If were searching for New York, and the database had New Deli, then there
 would be a match on New, but not on Deli. Since there were 2 elements in
 the searched city, each hit is worth 15. So the match on New would add 15,
 but the non-match on York would subtract (15 * .1) = 1.5 from the <a
-href="Ofac.html#M000005">score</a>. So the <a
-href="Ofac.html#M000005">score</a> would be (60 + 15 - 1.5) = 74, due to
+href="Ofac.html#M000006">score</a>. So the <a
+href="Ofac.html#M000006">score</a> would be (60 + 15 - 1.5) = 74, due to
 rounding.
 </p>
 <p>
 Only <tt>:city</tt> and <tt>:address</tt> subtract from the <a
-href="Ofac.html#M000005">score</a>, No match on name simply returns 0.
+href="Ofac.html#M000006">score</a>, No match on name simply returns 0.
 </p>
 <p>
 Matches for name are made for both the name and any aliases in the OFAC
@@ -376,16 +376,16 @@ database.
 </p>
 <p>
 Matches for <tt>:city</tt> and <tt>:address</tt> will only be added to the
-<a href="Ofac.html#M000005">score</a> if there is first a match on
+<a href="Ofac.html#M000006">score</a> if there is first a match on
 <tt>:name</tt>.
 </p>
 <p>
-We consider a <a href="Ofac.html#M000005">score</a> of 60 to be reasonable
+We consider a <a href="Ofac.html#M000006">score</a> of 60 to be reasonable
 as a hit.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000005-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000005-source">
+            onclick="toggleCode('M000006-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000006-source">
 <pre>
 <span class="ruby-comment cmt"># File lib/ofac/models/ofac.rb, line 85</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">score</span>
