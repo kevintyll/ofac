@@ -1,5 +1,5 @@
 require 'net/http'
-require 'activerecord'
+require 'active_record'
 require 'active_record/connection_adapters/mysql_adapter'
 
 class OfacSdnLoader
