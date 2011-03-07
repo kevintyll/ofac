@@ -32,11 +32,17 @@ class OfacSdnLoader
       puts "Converting file to csv format for Mysql import.  This could take several minutes."
       yield "Converting file to csv format for Mysql import.  This could take several minutes." if block_given?
 
-      csv_file = convert_to_flattened_csv(sdn, address, alt)
+      csv_file = convert_to_flattened_csv(sdn, address, alt) do |status|
+        yield status if block_given?
+      end
 
-      bulk_mysql_update(csv_file)
+      bulk_mysql_update(csv_file)do |status|
+        yield status if block_given?
+      end
     else
-      active_record_file_load(sdn, address, alt)
+      active_record_file_load(sdn, address, alt)do |status|
+        yield status if block_given?
+      end
     end
 
     sdn.close

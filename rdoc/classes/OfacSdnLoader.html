@@ -153,11 +153,17 @@ href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www
       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Converting file to csv format for Mysql import.  This could take several minutes.&quot;</span>
       <span class="ruby-keyword kw">yield</span> <span class="ruby-value str">&quot;Converting file to csv format for Mysql import.  This could take several minutes.&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
 
-      <span class="ruby-identifier">csv_file</span> = <span class="ruby-identifier">convert_to_flattened_csv</span>(<span class="ruby-identifier">sdn</span>, <span class="ruby-identifier">address</span>, <span class="ruby-identifier">alt</span>)
+      <span class="ruby-identifier">csv_file</span> = <span class="ruby-identifier">convert_to_flattened_csv</span>(<span class="ruby-identifier">sdn</span>, <span class="ruby-identifier">address</span>, <span class="ruby-identifier">alt</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">status</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-keyword kw">end</span>
 
-      <span class="ruby-identifier">bulk_mysql_update</span>(<span class="ruby-identifier">csv_file</span>)
+      <span class="ruby-identifier">bulk_mysql_update</span>(<span class="ruby-identifier">csv_file</span>)<span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">status</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">else</span>
-      <span class="ruby-identifier">active_record_file_load</span>(<span class="ruby-identifier">sdn</span>, <span class="ruby-identifier">address</span>, <span class="ruby-identifier">alt</span>)
+      <span class="ruby-identifier">active_record_file_load</span>(<span class="ruby-identifier">sdn</span>, <span class="ruby-identifier">address</span>, <span class="ruby-identifier">alt</span>)<span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">status</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">status</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-keyword kw">end</span>
     <span class="ruby-keyword kw">end</span>
 
     <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">close</span>
