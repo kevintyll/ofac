@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>README</title>
+
+<link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "./";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="./js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="./js/darkfish.js"></script>
+
+
+<body class="file">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="./index.html">Home</a>
+    <a href="./table_of_contents.html#classes">Classes</a>
+    <a href="./table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="./README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="./Ofac.html">Ofac</a>
+  
+    <li><a href="./OfacMatch.html">OfacMatch</a>
+  
+    <li><a href="./OfacSdn.html">OfacSdn</a>
+  
+    <li><a href="./OfacSdnLoader.html">OfacSdnLoader</a>
+  
+    <li><a href="./String.html">String</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation" class="description">
+  
+<h1 id="label-ofac">ofac</h1>
+<ul><li>
+<p><a href="http://kevintyll.github.com/ofac">kevintyll.github.com/ofac</a></p>
+</li><li>
+<p><a href="http://www.drexel-labs.com">www.drexel-labs.com</a></p>
+</li><li>
+<p><a
+href="http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml">www.treas.gov/offices/enforcement/ofac/sdn/index.shtml</a></p>
+</li></ul>
+
+<h2 id="label-DESCRIPTION%3A">DESCRIPTION:</h2>
+
+<p>ofac is a ruby gem that tries to find a match of a person’s name and
+address against the Office of Foreign Assets Control’s Specially
+Designated Nationals list…the so called terrorist watch list.</p>
+
+<p>This gem, like the ssn_validator gem, started as a need for the company I
+work for, Clarity Services Inc. We decided once again to create a gem out
+of it and share it with the community.  Much thanks goes to the management
+at Clarity Services Inc. for allowing this code to be open sourced.  Thanks
+also to Larry Berland at Clarity Services Inc.  The matching logic in the
+ofac_match.rb file was derived from his work.</p>
+
+<h2 id="label-FEATURES%3A">FEATURES:</h2>
+
+<p>Creates a score, 1 - 100, based on how well the name, address and city
+match the data on the SDN list.  Since we have to match on strings, the
+likely hood of an exact match are virtually nil.  So we’ve created an
+algorithm that creates a score.  The better the match, the higher the
+score.  A score of 100 would be a perfect match.</p>
+
+<p>The score is calculated by adding up the weightings of each part that is
+matched. So if only name is matched, then the max score is the weight for
+<code>:name</code> which is 60</p>
+
+<p>It’s possible to get partial matches, which will add partial weight to
+the score.  If there is not a match on the element as it is passed in, then
+each word element gets broken down and matches are tried on each partial
+element.  The weighting is distrubuted equally for each partial that is
+matched.</p>
+
+<p>If exact matches are not made, then a sounds like match is attempted.  Any
+match made by sounds like is given 75% of it’s weight to the score.
+Example:</p>
+
+<p>If you are trying to match the name Kevin Tyll and there is a record for
+Smith, Kevin in the database, then we will try to match both Kevin and Tyll
+separately, with each element Smith and Kevin.  Since only Kevin will find
+a match, and there were 2 elements in the searched name, the score will be
+added by half the weighting for <code>:name</code>.  So since the weight
+for <code>:name</code> is 60, then we will add 30 to the score.</p>
+
+<p>If you are trying to match the name Kevin Gregory Tyll and there is a
+record for Tyll, Kevin in the database, then we will try to match Kevin and
+Gregory and Tyll separately, with each element Tyll and Kevin.  Since both
+Kevin and Tyll will find a match, and there were 3 elements in the searched
+name, the score will be added by 2/3 the weighting for <code>:name</code>. 
+So since the weight for <code>:name</code> is 60, then we will add 40 to
+the score.</p>
+
+<p>If you are trying to match the name Kevin Tyll and there is a record for
+Kevin Gregory Tyll in the database, then we will try to match Kevin and
+Tyll separately, with each element Tyll and Kevin and Gregory.  Since both
+Kevin and Tyll will find a match, and there were 2 elements in the searched
+name, the score will be added by 2/2 the weighting for <code>:name</code>. 
+So since the weight for <code>:name</code> is 60, then we will add 60 to
+the score.</p>
+
+<p>If you are trying to match the name Kevin Tyll, and there is a record for
+Teel, Kevin in the database, then an exact match will be found for Kevin,
+and a sounds like match will be made for Tyll.  Since there were 2 elements
+in the searched name, and the weight for <code>:name</code> is 60, then
+each element is worth 30.  Since Kevin was an exact match, it will add 30,
+and since Tyll was a sounds like match, it will add 30 * .75.  So the
+<code>:name</code> portion of the search will be worth 53.</p>
+
+<p>If data is in the database for city and or address, and you pass data in
+for these elements, the score will be reduced by 10% of the weight if there
+is no match or sounds like match.  So if you get a match on name, you’ve
+already got a score of 60.  So if you don’t pass in an address or city,
+or if you do, but there is no city or address info in the database, then
+your final score will be 60.  But if you do pass in a city, say Tampa, and
+the city in the Database is New York, then we will deduct 10% of the weight
+(30 * .1) = 3 from the score since 30 is the weight for <code>:city</code>.
+So the final score will be 57.</p>
+
+<p>If were searching for New York, and the database had New Deli, then there
+would be a match on New, but not on Deli. Since there were 2 elements in
+the searched city, each hit is worth 15.  So the match on New would add 15,
+but the non-match on York would subtract (15 * .1) = 1.5 from the score. 
+So the score would be (60 + 15 - 1.5) = 74, due to rounding.</p>
+
+<p>Only <code>:city</code> and <code>:address</code> subtract from the score,
+No match on name simply returns 0.</p>
+
+<p>Matches for name are made for both the name and any aliases in the OFAC
+database.</p>
+
+<p>Matches for <code>:city</code> and <code>:address</code> will only be added
+to the score if there is first a match on <code>:name</code>.</p>
+
+<p>We consider a score of 60 to be reasonable as a hit.</p>
+
+<h2 id="label-SYNOPSIS%3A">SYNOPSIS:</h2>
+
+<p>Accepts a hash with the identity’s demographic information</p>
+
+<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>({:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Oscar Hernandez'</span>, :<span class="ruby-identifier">city</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Clearwater'</span>, :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'123 somewhere ln'</span>})
+</pre>
+
+<p><code>:name</code> is required to get a score.  If <code>:name</code> is
+missing, an error will not be thrown, but a score of 0 will be returned.</p>
+
+<p>The more information provided, the higher the score could be.  A score of
+100 would mean all fields were passed in, and all fields were 100% matches.
+If only the name is passed in without an address, it will be impossible to
+get a score of 100, even if the name matches perfectly.</p>
+
+<p>Acceptable hash keys and their weighting in score calculation:</p>
+<ul><li>
+<p><code>:name</code> (weighting = 60%) (required) This can be a person,
+business, or marine vessel</p>
+</li><li>
+<p><code>:address</code> (weighting = 10%)</p>
+</li><li>
+<p><code>:city</code> (weighting = 30%)</p>
+</li><li>
+<p>Instantiate the object with the identity’s name, street address, and
+city.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ofac</span> = <span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Kevin Tyll'</span>, :<span class="ruby-identifier">city</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Clearwater'</span>, :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'123 Somewhere Ln.'</span>)
+</pre>
+</li><li>
+<p>Then get the score</p>
+
+<pre class="ruby"><span class="ruby-identifier">ofac</span>.<span class="ruby-identifier">score</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword">return</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">score</span> <span class="ruby-value">1</span> <span class="ruby-operator">-</span> <span class="ruby-value">100</span>
+</pre>
+</li><li>
+<p>You can also get the list of all the partial matches with the score of each
+record.</p>
+
+<pre class="ruby"><span class="ruby-identifier">ofac</span>.<span class="ruby-identifier">possible_hits</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">returns</span> <span class="ruby-identifier">an</span> <span class="ruby-identifier">array</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">hashes</span>.
+</pre>
+</li></ul>
+
+<h2 id="label-REQUIREMENTS%3A">REQUIREMENTS:</h2>
+<ul><li>
+<p>Rails 2.0.0 or greater</p>
+</li></ul>
+
+<h2 id="label-INSTALL%3A">INSTALL:</h2>
+<ul><li>
+<p>To install the gem:</p>
+
+<pre>sudo gem install kevintyll-ofac</pre>
+</li><li>
+<p>To create the necessary db migration, from the command line, run:</p>
+
+<pre>script/generate ofac_migration</pre>
+</li><li>
+<p>Require the gem in your environment.rb file in the Rails::Initializer
+block:</p>
+
+<pre class="ruby"><span class="ruby-identifier">config</span>.<span class="ruby-identifier">gem</span> <span class="ruby-string">'kevintyll-ofac'</span>, :<span class="ruby-identifier">lib</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'ofac'</span>
+</pre>
+</li><li>
+<p>To load your table with the current OFAC data, from the command line, run:</p>
+
+<pre>rake ofac:update_data
+
+* The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
+    http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.</pre>
+</li></ul>
+
+<h2 id="label-Copyright">Copyright</h2>
+
+<p>Copyright © 2009 Kevin Tyll. See LICENSE for details.</p>
+
+</div>
+
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+

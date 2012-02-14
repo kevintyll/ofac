@@ -1,3 +1,8 @@
+== 1.2.4 2012-02-14
+
+*  1 enhancements:
+   * use a proxy server if the ENV['http_proxy'] variable is set.  ie. your.proxy.addr:8080
+
 == 1.2.2, 1.2.3 2011-03-07
 
 * 1 enhancement:
