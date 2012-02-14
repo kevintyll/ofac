@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ofac}
-  s.version = "1.2.3"
+  s.version = "1.2.4"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = ["Kevin Tyll"]
-  s.date = %q{2011-03-07}
+  s.authors = [%q{Kevin Tyll}]
+  s.date = %q{2012-02-14}
   s.description = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
   s.email = %q{kevintyll@gmail.com}
   s.extra_rdoc_files = [
@@ -40,6 +40,12 @@ Gem::Specification.new do |s|
     "ofac.gemspec",
     "pkg/ofac-0.1.0.gem",
     "pkg/ofac-1.0.0.gem",
+    "rdoc/Ofac.html",
+    "rdoc/OfacMatch.html",
+    "rdoc/OfacSdn.html",
+    "rdoc/OfacSdnLoader.html",
+    "rdoc/README_rdoc.html",
+    "rdoc/String.html",
     "rdoc/classes/Ofac.html",
     "rdoc/classes/OfacMatch.html",
     "rdoc/classes/OfacSdn.html",
@@ -56,8 +62,46 @@ Gem::Specification.new do |s|
     "rdoc/fr_class_index.html",
     "rdoc/fr_file_index.html",
     "rdoc/fr_method_index.html",
+    "rdoc/images/add.png",
+    "rdoc/images/brick.png",
+    "rdoc/images/brick_link.png",
+    "rdoc/images/bug.png",
+    "rdoc/images/bullet_black.png",
+    "rdoc/images/bullet_toggle_minus.png",
+    "rdoc/images/bullet_toggle_plus.png",
+    "rdoc/images/date.png",
+    "rdoc/images/delete.png",
+    "rdoc/images/find.png",
+    "rdoc/images/loadingAnimation.gif",
+    "rdoc/images/macFFBgHack.png",
+    "rdoc/images/package.png",
+    "rdoc/images/page_green.png",
+    "rdoc/images/page_white_text.png",
+    "rdoc/images/page_white_width.png",
+    "rdoc/images/plugin.png",
+    "rdoc/images/ruby.png",
+    "rdoc/images/tag_blue.png",
+    "rdoc/images/tag_green.png",
+    "rdoc/images/transparent.png",
+    "rdoc/images/wrench.png",
+    "rdoc/images/wrench_orange.png",
+    "rdoc/images/zoom.png",
     "rdoc/index.html",
+    "rdoc/js/darkfish.js",
+    "rdoc/js/jquery.js",
+    "rdoc/js/navigation.js",
+    "rdoc/js/search.js",
+    "rdoc/js/search_index.js",
+    "rdoc/js/searcher.js",
+    "rdoc/lib/ofac/models/ofac_rb.html",
+    "rdoc/lib/ofac/models/ofac_sdn_loader_rb.html",
+    "rdoc/lib/ofac/models/ofac_sdn_rb.html",
+    "rdoc/lib/ofac/ofac_match_rb.html",
+    "rdoc/lib/ofac/ruby_string_extensions_rb.html",
+    "rdoc/lib/ofac_rb.html",
     "rdoc/rdoc-style.css",
+    "rdoc/rdoc.css",
+    "rdoc/table_of_contents.html",
     "test/files/test_address_data_load.pip",
     "test/files/test_alt_data_load.pip",
     "test/files/test_sdn_data_load.pip",
@@ -79,21 +123,14 @@ Gem::Specification.new do |s|
 
     * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
         http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.}
-  s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.6}
+  s.require_paths = [%q{lib}]
+  s.rubygems_version = %q{1.8.9}
   s.summary = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
-  s.test_files = [
-    "test/mocks/test/ofac_sdn_loader.rb",
-    "test/ofac_sdn_loader_test.rb",
-    "test/ofac_test.rb",
-    "test/test_helper.rb"
-  ]
 
   if s.respond_to? :specification_version then
-    current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
     s.specification_version = 3
 
-    if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
+    if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
     else
     end
   else
