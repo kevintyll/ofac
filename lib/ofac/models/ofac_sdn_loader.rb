@@ -15,9 +15,8 @@ class OfacSdnLoader
     uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.pip')
 
     proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
-    proxy_user, proxy_pass = uri.userinfo.split(/:/) if uri.userinfo
 
-    bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port, proxy_user, proxy_pass).get(uri))
+    bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
     sdn.rewind
     if bytes == 0 || convert_line_to_array(sdn.readline).size != 12
       puts "Trouble downloading file.  The url may have changed."
@@ -27,10 +26,10 @@ class OfacSdnLoader
       sdn.rewind
     end
     address = Tempfile.new('sdn')
-    address.write(Net::HTTP.get(URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')))
+    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')))
     address.rewind
     alt = Tempfile.new('sdn')
-    alt.write(Net::HTTP.get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
+    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
     alt.rewind
 
     if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::MysqlAdapter)
