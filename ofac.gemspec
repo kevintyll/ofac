@@ -115,7 +115,8 @@ Gem::Specification.new do |s|
   s.post_install_message = %q{For more information on ofac, see http://kevintyll.github.com/ofac/
 
 * To create the necessary db migration, from the command line, run:
-    script/generate ofac_migration
+    script/generate ofac_migration for Rails 2 applications
+		rails generate ofac_migration:build for Rails 3 applications
 * Require the gem in your environment.rb file in the Rails::Initializer block:
     config.gem 'kevintyll-ofac', :lib => 'ofac'
 * To load your table with the current OFAC data, from the command line, run:
