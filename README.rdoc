@@ -126,7 +126,7 @@ Acceptable hash keys and their weighting in score calculation:
     rails generate ofac_migration:build
 * To add the gem to your Rails project:
 ===== Add the gem to your Gemfile:
-    gem "ofac", "~> 1.2.5"
+    gem "ofac", "~> 1.3.0"
 ===== Run the Bundler install command
 		bundle install
 * To load your table with the current OFAC data, from the command line, run:
