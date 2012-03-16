@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+
+<title>Class: OfacMigration::Generators::BuildGenerator</title>
+
+<link type="text/css" media="screen" href="../../rdoc.css" rel="stylesheet">
+
+<script type="text/javascript">
+  var rdoc_rel_prefix = "../../";
+</script>
+
+<script type="text/javascript" charset="utf-8" src="../../js/jquery.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/navigation.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/search_index.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/search.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/searcher.js"></script>
+<script type="text/javascript" charset="utf-8" src="../../js/darkfish.js"></script>
+
+
+<body id="top" class="class">
+<nav id="metadata">
+  <nav id="home-section" class="section">
+  <h3 class="section-header">
+    <a href="../../index.html">Home</a>
+    <a href="../../table_of_contents.html#classes">Classes</a>
+    <a href="../../table_of_contents.html#methods">Methods</a>
+  </h3>
+</nav>
+
+
+  <nav id="search-section" class="section project-section" class="initially-hidden">
+  <form action="#" method="get" accept-charset="utf-8">
+    <h3 class="section-header">
+      <input type="text" name="search" placeholder="Search" id="search-field"
+             title="Type to search, Up and Down to navigate, Enter to load">
+    </h3>
+  </form>
+
+  <ul id="search-results" class="initially-hidden"></ul>
+</nav>
+
+
+  <div id="file-metadata">
+    <nav id="file-list-section" class="section">
+  <h3 class="section-header">Defined In</h3>
+  <ul>
+    <li>lib/generators/ofac_migration/build/build_generator.rb
+  </ul>
+</nav>
+
+    
+  </div>
+
+  <div id="class-metadata">
+    
+    <nav id="parent-class-section" class="section">
+  <h3 class="section-header">Parent</h3>
+  
+  <p class="link">Rails::Generators::Base
+  
+</nav>
+
+    <!-- Included Modules -->
+<nav id="includes-section" class="section">
+  <h3 class="section-header">Included Modules</h3>
+
+  <ul class="link-list">
+  
+  
+    <li><span class="include">Rails::Generators::Migration</span>
+  
+  
+  </ul>
+</nav>
+
+    <!-- Method Quickref -->
+<nav id="method-list-section" class="section">
+  <h3 class="section-header">Methods</h3>
+
+  <ul class="link-list">
+    
+    <li><a href="#method-c-next_migration_number">::next_migration_number</a>
+    
+    <li><a href="#method-i-copy_migrations">#copy_migrations</a>
+    
+  </ul>
+</nav>
+
+  </div>
+
+  <div id="project-metadata">
+    <nav id="fileindex-section" class="section project-section">
+  <h3 class="section-header">Pages</h3>
+
+  <ul>
+  
+    <li class="file"><a href="../../README_rdoc.html">README</a>
+  
+  </ul>
+</nav>
+
+    <nav id="classindex-section" class="section project-section">
+  <h3 class="section-header">Class and Module Index</h3>
+
+  <ul class="link-list">
+  
+    <li><a href="../../OfacMigration.html">OfacMigration</a>
+  
+    <li><a href="../../OfacMigration/Generators.html">OfacMigration::Generators</a>
+  
+    <li><a href="../../OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
+  
+    <li><a href="../../CreateOfacSdns.html">CreateOfacSdns</a>
+  
+    <li><a href="../../Ofac.html">Ofac</a>
+  
+    <li><a href="../../OfacMatch.html">OfacMatch</a>
+  
+    <li><a href="../../OfacSdn.html">OfacSdn</a>
+  
+    <li><a href="../../OfacSdnLoader.html">OfacSdnLoader</a>
+  
+    <li><a href="../../String.html">String</a>
+  
+  </ul>
+</nav>
+
+  </div>
+</nav>
+
+<div id="documentation">
+  <h1 class="class">class OfacMigration::Generators::BuildGenerator</h1>
+
+  <div id="description" class="description">
+    
+  </div><!-- description -->
+
+  
+  
+  
+  <section id="5Buntitled-5D" class="documentation-section">
+    
+
+    
+
+    
+
+    
+
+    <!-- Methods -->
+    
+     <section id="public-class-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Class Methods</h3>
+
+    
+      <div id="method-c-next_migration_number" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">next_migration_number</span><span
+            class="method-args">(path)</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>Get the next migration number</p>
+          
+
+          
+          <div class="method-source-code" id="next_migration_number-source">
+            <pre><span class="ruby-comment"># File lib/generators/ofac_migration/build/build_generator.rb, line 12</span>
+<span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">next_migration_number</span>(<span class="ruby-identifier">path</span>)
+        <span class="ruby-keyword">unless</span> <span class="ruby-ivar">@prev_migration_nr</span>
+                <span class="ruby-ivar">@prev_migration_nr</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">utc</span>.<span class="ruby-identifier">strftime</span>(<span class="ruby-string">&quot;%Y%m%d%H%M%S&quot;</span>).<span class="ruby-identifier">to_i</span>
+        <span class="ruby-keyword">else</span>
+                <span class="ruby-ivar">@prev_migration_nr</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+        <span class="ruby-keyword">end</span>
+        <span class="ruby-ivar">@prev_migration_nr</span>.<span class="ruby-identifier">to_s</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- next_migration_number-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- next_migration_number-method -->
+
+    
+    </section><!-- public-class-method-details -->
+  
+     <section id="public-instance-5Buntitled-5D-method-details" class="method-section section">
+      <h3 class="section-header">Public Instance Methods</h3>
+
+    
+      <div id="method-i-copy_migrations" class="method-detail ">
+        
+        <div class="method-heading">
+          <span class="method-name">copy_migrations</span><span
+            class="method-args">()</span>
+          <span class="method-click-advice">click to toggle source</span>
+        </div>
+        
+
+        <div class="method-description">
+          
+          <p>copy the migration file over</p>
+          
+
+          
+          <div class="method-source-code" id="copy_migrations-source">
+            <pre><span class="ruby-comment"># File lib/generators/ofac_migration/build/build_generator.rb, line 23</span>
+<span class="ruby-keyword">def</span> <span class="ruby-identifier">copy_migrations</span>
+        <span class="ruby-identifier">migration_template</span> <span class="ruby-string">&quot;create_ofac_sdns.rb&quot;</span>, <span class="ruby-string">&quot;db/migrate/create_ofac_sdns.rb&quot;</span>
+<span class="ruby-keyword">end</span></pre>
+          </div><!-- copy_migrations-source -->
+          
+        </div>
+
+        
+
+        
+      </div><!-- copy_migrations-method -->
+
+    
+    </section><!-- public-instance-method-details -->
+  
+  </section><!-- 5Buntitled-5D -->
+
+</div><!-- documentation -->
+
+
+<footer id="validator-badges">
+  <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.11.
+  <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
+</footer>
+
