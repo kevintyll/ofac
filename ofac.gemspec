@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{ofac}
-  s.version = "1.2.5"
+  s.version = "1.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = [%q{Kevin Tyll}]
-  s.date = %q{2012-02-15}
+  s.date = %q{2012-03-16}
   s.description = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
   s.email = %q{kevintyll@gmail.com}
   s.extra_rdoc_files = [
@@ -28,6 +28,8 @@ Gem::Specification.new do |s|
     "generators/ofac_migration/ofac_migration_generator.rb",
     "generators/ofac_migration/templates/.DS_Store",
     "generators/ofac_migration/templates/migration.rb",
+    "lib/generators/ofac_migration/build/build_generator.rb",
+    "lib/generators/ofac_migration/build/templates/create_ofac_sdns.rb",
     "lib/ofac.rb",
     "lib/ofac/models/ofac.rb",
     "lib/ofac/models/ofac_sdn.rb",
@@ -40,8 +42,12 @@ Gem::Specification.new do |s|
     "ofac.gemspec",
     "pkg/ofac-0.1.0.gem",
     "pkg/ofac-1.0.0.gem",
+    "rdoc/CreateOfacSdns.html",
     "rdoc/Ofac.html",
     "rdoc/OfacMatch.html",
+    "rdoc/OfacMigration.html",
+    "rdoc/OfacMigration/Generators.html",
+    "rdoc/OfacMigration/Generators/BuildGenerator.html",
     "rdoc/OfacSdn.html",
     "rdoc/OfacSdnLoader.html",
     "rdoc/README_rdoc.html",
@@ -93,6 +99,8 @@ Gem::Specification.new do |s|
     "rdoc/js/search.js",
     "rdoc/js/search_index.js",
     "rdoc/js/searcher.js",
+    "rdoc/lib/generators/ofac_migration/build/build_generator_rb.html",
+    "rdoc/lib/generators/ofac_migration/build/templates/create_ofac_sdns_rb.html",
     "rdoc/lib/ofac/models/ofac_rb.html",
     "rdoc/lib/ofac/models/ofac_sdn_loader_rb.html",
     "rdoc/lib/ofac/models/ofac_sdn_rb.html",
@@ -115,8 +123,7 @@ Gem::Specification.new do |s|
   s.post_install_message = %q{For more information on ofac, see http://kevintyll.github.com/ofac/
 
 * To create the necessary db migration, from the command line, run:
-    script/generate ofac_migration for Rails 2 applications
-		rails generate ofac_migration:build for Rails 3 applications
+    script/generate ofac_migration
 * Require the gem in your environment.rb file in the Rails::Initializer block:
     config.gem 'kevintyll-ofac', :lib => 'ofac'
 * To load your table with the current OFAC data, from the command line, run:
