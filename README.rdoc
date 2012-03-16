@@ -106,12 +106,29 @@ Acceptable hash keys and their weighting in score calculation:
 
 == INSTALL:
 
+==== Rails 2.0
+
 * To install the gem:
     sudo gem install kevintyll-ofac
 * To create the necessary db migration, from the command line, run:
     script/generate ofac_migration
 * Require the gem in your environment.rb file in the Rails::Initializer block:
     config.gem 'kevintyll-ofac', :lib => 'ofac'
+* To load your table with the current OFAC data, from the command line, run:
+    rake ofac:update_data
+
+    * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
+        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.
+
+==== Rails 3.0
+
+* To create the necessary db migration, from the command line, run:
+    rails generate ofac_migration:build
+* To add the gem to your Rails project:
+===== Add the gem to your Gemfile:
+    gem "ofac", "~> 1.3.0"
+===== Run the Bundler install command
+		bundle install
 * To load your table with the current OFAC data, from the command line, run:
     rake ofac:update_data
 
