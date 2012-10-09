@@ -4,14 +4,14 @@
 # -*- encoding: utf-8 -*-
 
 Gem::Specification.new do |s|
-  s.name = %q{ofac}
-  s.version = "1.3.0"
+  s.name = "ofac"
+  s.version = "1.3.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
-  s.authors = [%q{Kevin Tyll}]
-  s.date = %q{2012-03-16}
-  s.description = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
-  s.email = %q{kevintyll@gmail.com}
+  s.authors = ["Kevin Tyll"]
+  s.date = "2012-10-09"
+  s.description = "Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list."
+  s.email = "kevintyll@gmail.com"
   s.extra_rdoc_files = [
     "LICENSE",
     "README.rdoc"
@@ -40,8 +40,6 @@ Gem::Specification.new do |s|
     "nbproject/project.properties",
     "nbproject/project.xml",
     "ofac.gemspec",
-    "pkg/ofac-0.1.0.gem",
-    "pkg/ofac-1.0.0.gem",
     "rdoc/CreateOfacSdns.html",
     "rdoc/Ofac.html",
     "rdoc/OfacMatch.html",
@@ -119,21 +117,11 @@ Gem::Specification.new do |s|
     "test/ofac_test.rb",
     "test/test_helper.rb"
   ]
-  s.homepage = %q{http://github.com/kevintyll/ofac}
-  s.post_install_message = %q{For more information on ofac, see http://kevintyll.github.com/ofac/
-
-* To create the necessary db migration, from the command line, run:
-    script/generate ofac_migration
-* Require the gem in your environment.rb file in the Rails::Initializer block:
-    config.gem 'kevintyll-ofac', :lib => 'ofac'
-* To load your table with the current OFAC data, from the command line, run:
-    rake ofac:update_data
-
-    * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
-        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.}
-  s.require_paths = [%q{lib}]
-  s.rubygems_version = %q{1.8.9}
-  s.summary = %q{Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list.}
+  s.homepage = "http://github.com/kevintyll/ofac"
+  s.post_install_message = "For more information on ofac, see http://kevintyll.github.com/ofac/\n\n* To create the necessary db migration, from the command line, run:\n    script/generate ofac_migration\n* Require the gem in your environment.rb file in the Rails::Initializer block:\n    config.gem 'kevintyll-ofac', :lib => 'ofac'\n* To load your table with the current OFAC data, from the command line, run:\n    rake ofac:update_data\n\n    * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at\n        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml."
+  s.require_paths = ["lib"]
+  s.rubygems_version = "1.8.24"
+  s.summary = "Attempts to find a hit on the Office of Foreign Assets Control's Specially Designated Nationals list."
 
   if s.respond_to? :specification_version then
     s.specification_version = 3
