@@ -1,6 +1,14 @@
 require 'net/http'
 require 'active_record'
-require 'active_record/connection_adapters/mysql_adapter'
+begin
+  require 'active_record/connection_adapters/mysql2_adapter'
+rescue Gem::LoadError
+  begin
+    require 'active_record/connection_adapters/mysql_adapter'
+  rescue Gem::LoadError
+    puts 'Not using mysql, will use active record to load data'
+  end
+end
 
 class OfacSdnLoader
 
@@ -32,7 +40,7 @@ class OfacSdnLoader
     alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
     alt.rewind
 
-    if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::MysqlAdapter)
+    if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) || OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter)
       puts "Converting file to csv format for Mysql import.  This could take several minutes."
       yield "Converting file to csv format for Mysql import.  This could take several minutes." if block_given?
 
