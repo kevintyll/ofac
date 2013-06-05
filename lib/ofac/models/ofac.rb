@@ -97,8 +97,8 @@ class Ofac
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        sql_name_partial = name_array.collect {|partial_name| ["name like ?", "%#{partial_name}%"]}
-        sql_alt_name_partial = name_array.collect {|partial_name| ["alternate_identity_name like ?", "%#{partial_name}%"]}
+        sql_name_partial = name_array.collect {|partial_name| ["lower(name) like ?", "%#{partial_name.downcase}%"]}
+        sql_alt_name_partial = name_array.collect {|partial_name| ["lower(alternate_identity_name) like ?", "%#{partial_name.downcase}%"]}
         
         name_conditions = sql_name_partial.transpose
         name_values = name_conditions.second

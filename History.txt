@@ -1,3 +1,8 @@
+== 1.3.2 2013-06-05
+
+*  1 enhancement:
+   * merge pkarnawat's commit to make sql db agnostic.  SQL was assuming db was case insensitive.
+
 == 1.3.1 2012-10-09
 
 *  1 enhancement:

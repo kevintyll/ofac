@@ -1,11 +1,12 @@
 require 'net/http'
 require 'active_record'
+require 'tempfile'
 begin
   require 'active_record/connection_adapters/mysql2_adapter'
-rescue Gem::LoadError
+rescue Gem::LoadError, LoadError
   begin
     require 'active_record/connection_adapters/mysql_adapter'
-  rescue Gem::LoadError
+  rescue Gem::LoadError, LoadError
     puts 'Not using mysql, will use active record to load data'
   end
 end
