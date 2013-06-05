@@ -4,3 +4,4 @@ coverage
 pkg
 nbproject
 *.idea
+atlassian-ide-plugin.xml
