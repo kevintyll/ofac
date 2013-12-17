@@ -107,9 +107,8 @@ class Ofac
         alt_name_values = alt_name_conditions.second
         alt_name_conditions = [alt_name_conditions.first.join(' and ')]
         conditions = ["(#{name_conditions}) or (#{alt_name_conditions})"] + name_values + alt_name_values
+        possible_sdns = OfacSdn.where(sdn_type: 'individual').where(conditions.first.gsub('"', '').gsub(/\[|\]/, ''), *conditions[1..conditions.size]).select([:name, :alternate_identity_name, :address, :city])
 
-        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
-        
       end
     end
     !possible_sdns.empty?
@@ -149,9 +148,9 @@ class Ofac
         conditions = conditions.transpose
         conditions = [conditions.first.join(' or ')] + conditions.second
 
-        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
+        possible_sdns = OfacSdn.where(sdn_type: 'individual').where(conditions.first.gsub('"', '').gsub(/\[|\]/, ''), *conditions[1..conditions.size]).select([:name, :alternate_identity_name, :address, :city])
         possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
-     
+
         match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(', ')}"},
             :address => {:weight => 10, :token => @identity[:address]},
             :city => {:weight => 30, :token => @identity[:city]}})
