@@ -19,7 +19,7 @@ class OfacSdn < ActiveRecord::Base
       conditions = "(#{name_conditions}) or (#{alt_name_conditions})"
     end
     # we need the values in there twice, once for the names and once for the alt_names
-    OfacSdn.select(:name, :alternate_identity_name, :address, :city).where(sdn_type: 'individual').where(conditions, *(values * 2))
+    OfacSdn.select([:name, :alternate_identity_name, :address, :city]).where(sdn_type: 'individual').where(conditions, *(values * 2))
   end
 
 end

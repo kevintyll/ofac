@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class OfacSdn - ofac 2.0.0</title>
+<title>class OfacSdn - ofac 2.0.1</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -182,7 +182,7 @@
     <span class="ruby-identifier">conditions</span> = <span class="ruby-node">&quot;(#{name_conditions}) or (#{alt_name_conditions})&quot;</span>
   <span class="ruby-keyword">end</span>
   <span class="ruby-comment"># we need the values in there twice, once for the names and once for the alt_names</span>
-  <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">select</span>(<span class="ruby-value">:name</span>, <span class="ruby-value">:alternate_identity_name</span>, <span class="ruby-value">:address</span>, <span class="ruby-value">:city</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">sdn_type</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;individual&#39;</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">conditions</span>, <span class="ruby-operator">*</span>(<span class="ruby-identifier">values</span> <span class="ruby-operator">*</span> <span class="ruby-value">2</span>))
+  <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">select</span>([<span class="ruby-value">:name</span>, <span class="ruby-value">:alternate_identity_name</span>, <span class="ruby-value">:address</span>, <span class="ruby-value">:city</span>]).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">sdn_type</span><span class="ruby-operator">:</span> <span class="ruby-string">&#39;individual&#39;</span>).<span class="ruby-identifier">where</span>(<span class="ruby-identifier">conditions</span>, <span class="ruby-operator">*</span>(<span class="ruby-identifier">values</span> <span class="ruby-operator">*</span> <span class="ruby-value">2</span>))
 <span class="ruby-keyword">end</span></pre>
           </div><!-- possible_sdns-source -->
           
