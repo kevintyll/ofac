@@ -69,6 +69,7 @@ Gem::Specification.new do |s|
     "rdoc/fr_file_index.html",
     "rdoc/fr_method_index.html",
     "rdoc/images/add.png",
+    "rdoc/images/arrow_up.png",
     "rdoc/images/brick.png",
     "rdoc/images/brick_link.png",
     "rdoc/images/bug.png",
