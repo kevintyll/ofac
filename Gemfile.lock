@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    Ofac (2.0.2)
+    ofac (2.0.2)
       rails (>= 3.0)
 
 GEM
@@ -108,10 +108,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  Ofac!
   bundler
   minitest
   minitest-reporters
+  ofac!
   shoulda
   sqlite3
   turn
