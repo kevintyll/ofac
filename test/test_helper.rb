@@ -1,7 +1,11 @@
-require 'rubygems'
 require 'test/unit'
+require 'turn'
 require 'shoulda'
 require 'mocks/test/ofac_sdn_loader'
+
+# for RubyMine
+require 'minitest/reporters'
+MiniTest::Reporters.use! [MiniTest::Reporters::RubyMineReporter.new] if ENV["RUBYMINE_TESTUNIT_REPORTER"]
 
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))

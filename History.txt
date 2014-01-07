@@ -1,3 +1,9 @@
+== 2.0.2 2014-01-07
+
+*  1 enhancement:
+   * added bundler
+   * removed jeweler
+
 == 2.0.1 2014-01-07
 
 *  1 bug fix

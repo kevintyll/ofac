@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>README - ofac 2.0.1</title>
+<title>README - Ofac</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -43,27 +43,6 @@
 </nav>
 
 
-  
-<div id="table-of-contents">
-  <nav class="section">
-    <h3 class="section-header">Table of Contents</h3>
-    <ul>
-      <li><a href="#label-ofac">ofac</a>
-      <li><a href="#label-DESCRIPTION%3A">DESCRIPTION:</a>
-      <li><a href="#label-FEATURES%3A">FEATURES:</a>
-      <li><a href="#label-SYNOPSIS%3A">SYNOPSIS:</a>
-      <li><a href="#label-REQUIREMENTS%3A">REQUIREMENTS:</a>
-      <li><a href="#label-INSTALL%3A">INSTALL:</a>
-      <li><a href="#label-Rails+2.0+-+use+version+1.3.2+or+earlier">Rails 2.0 - use version 1.3.2 or earlier</a>
-      <li><a href="#label-Rails+3.0+%26+4.0">Rails 3.0 &amp; 4.0</a>
-      <li><a href="#label-Add+the+gem+to+your+Gemfile%3A">Add the gem to your Gemfile:</a>
-      <li><a href="#label-Run+the+Bundler+install+command">Run the Bundler install command</a>
-      <li><a href="#label-Copyright">Copyright</a>
-    </ul>
-  </nav>
-</div>
-
-
   <div id="project-metadata">
     <nav id="fileindex-section" class="section project-section">
   <h3 class="section-header">Pages</h3>
@@ -80,17 +59,19 @@
 
   <ul class="link-list">
   
-    <li><a href="./CreateOfacSdns.html">CreateOfacSdns</a>
-  
-    <li><a href="./Ofac.html">Ofac</a>
-  
-    <li><a href="./OfacMatch.html">OfacMatch</a>
-  
     <li><a href="./OfacMigration.html">OfacMigration</a>
   
     <li><a href="./OfacMigration/Generators.html">OfacMigration::Generators</a>
   
     <li><a href="./OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
+  
+    <li><a href="./CreateOfacSdns.html">CreateOfacSdns</a>
+  
+    <li><a href="./Object.html">Object</a>
+  
+    <li><a href="./Ofac.html">Ofac</a>
+  
+    <li><a href="./OfacMatch.html">OfacMatch</a>
   
     <li><a href="./OfacSdn.html">OfacSdn</a>
   
@@ -106,7 +87,7 @@
 
 <div id="documentation" class="description">
   
-<h1 id="label-ofac">ofac<span><a href="#label-ofac">&para;</a> <a href="#documentation">&uarr;</a></span></h1>
+<h1 id="label-ofac">ofac</h1>
 <ul><li>
 <p><a href="http://kevintyll.github.com/ofac">kevintyll.github.com/ofac</a></p>
 </li><li>
@@ -116,7 +97,7 @@
 href="http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml">www.treas.gov/offices/enforcement/ofac/sdn/index.shtml</a></p>
 </li></ul>
 
-<h2 id="label-DESCRIPTION%3A">DESCRIPTION:<span><a href="#label-DESCRIPTION%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-DESCRIPTION%3A">DESCRIPTION:</h2>
 
 <p>ofac is a ruby gem that tries to find a match of a person&#39;s name and
 address against the Office of Foreign Assets Control&#39;s Specially
@@ -129,7 +110,7 @@ at Clarity Services Inc. for allowing this code to be open sourced.  Thanks
 also to Larry Berland at Clarity Services Inc.  The matching logic in the
 ofac_match.rb file was derived from his work.</p>
 
-<h2 id="label-FEATURES%3A">FEATURES:<span><a href="#label-FEATURES%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-FEATURES%3A">FEATURES:</h2>
 
 <p>Creates a score, 1 - 100, based on how well the name, address and city
 match the data on the SDN list.  Since we have to match on strings, the
@@ -209,7 +190,7 @@ to the score if there is first a match on <code>:name</code>.</p>
 
 <p>We consider a score of 60 to be reasonable as a hit.</p>
 
-<h2 id="label-SYNOPSIS%3A">SYNOPSIS:<span><a href="#label-SYNOPSIS%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-SYNOPSIS%3A">SYNOPSIS:</h2>
 
 <p>Accepts a hash with the identity&#39;s demographic information</p>
 
@@ -251,14 +232,14 @@ record.</p>
 </pre>
 </li></ul>
 
-<h2 id="label-REQUIREMENTS%3A">REQUIREMENTS:<span><a href="#label-REQUIREMENTS%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-REQUIREMENTS%3A">REQUIREMENTS:</h2>
 <ul><li>
 <p>Rails 2.0.0 or greater</p>
 </li></ul>
 
-<h2 id="label-INSTALL%3A">INSTALL:<span><a href="#label-INSTALL%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-INSTALL%3A">INSTALL:</h2>
 
-<h4 id="label-Rails+2.0+-+use+version+1.3.2+or+earlier">Rails 2.0 - use version 1.3.2 or earlier<span><a href="#label-Rails+2.0+-+use+version+1.3.2+or+earlier">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+<h4 id="label-Rails+2.0+-+use+version+1.3.2+or+earlier">Rails 2.0 - use version 1.3.2 or earlier</h4>
 <ul><li>
 <p>To install the gem:</p>
 
@@ -282,7 +263,7 @@ block:</p>
     http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.</pre>
 </li></ul>
 
-<h4 id="label-Rails+3.0+%26+4.0">Rails 3.0 &amp; 4.0<span><a href="#label-Rails+3.0+%26+4.0">&para;</a> <a href="#documentation">&uarr;</a></span></h4>
+<h4 id="label-Rails+3.0+%26+4.0">Rails 3.0 &amp; 4.0</h4>
 <ul><li>
 <p>To create the necessary db migration, from the command line, run:</p>
 
@@ -291,11 +272,11 @@ block:</p>
 <p>To add the gem to your Rails project:</p>
 </li></ul>
 
-<h5 id="label-Add+the+gem+to+your+Gemfile%3A">Add the gem to your Gemfile:<span><a href="#label-Add+the+gem+to+your+Gemfile%3A">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+<h5 id="label-Add+the+gem+to+your+Gemfile%3A">Add the gem to your Gemfile:</h5>
 
 <pre>gem &quot;ofac&quot;, &quot;~&gt; 2.0.0&quot;</pre>
 
-<h5 id="label-Run+the+Bundler+install+command">Run the Bundler install command<span><a href="#label-Run+the+Bundler+install+command">&para;</a> <a href="#documentation">&uarr;</a></span></h5>
+<h5 id="label-Run+the+Bundler+install+command">Run the Bundler install command</h5>
 
 <pre>bundle install</pre>
 <ul><li>
@@ -307,7 +288,7 @@ block:</p>
     http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.</pre>
 </li></ul>
 
-<h2 id="label-Copyright">Copyright<span><a href="#label-Copyright">&para;</a> <a href="#documentation">&uarr;</a></span></h2>
+<h2 id="label-Copyright">Copyright</h2>
 
 <p>Copyright © 2009-2013 Kevin Tyll. See LICENSE for details.</p>
 
@@ -317,7 +298,7 @@ block:</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 4.0.0.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.2.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

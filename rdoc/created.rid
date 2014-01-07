@@ -1,4 +1,4 @@
-Tue, 07 Jan 2014 10:20:16 -0500
+Tue, 07 Jan 2014 11:15:38 -0500
 README.rdoc	Tue, 07 Jan 2014 09:55:46 -0500
 lib/generators/ofac_migration/build/build_generator.rb	Fri, 16 Mar 2012 15:37:08 -0400
 lib/generators/ofac_migration/build/templates/create_ofac_sdns.rb	Fri, 16 Mar 2012 15:37:08 -0400
@@ -8,3 +8,4 @@ lib/ofac/models/ofac_sdn.rb	Tue, 07 Jan 2014 10:18:10 -0500
 lib/ofac/models/ofac_sdn_loader.rb	Wed, 05 Jun 2013 09:04:58 -0400
 lib/ofac/ofac_match.rb	Wed, 29 Jul 2009 13:27:13 -0400
 lib/ofac/ruby_string_extensions.rb	Mon, 11 May 2009 12:39:33 -0400
+lib/ofac/version.rb	Tue, 07 Jan 2014 11:06:12 -0500
