@@ -13,15 +13,15 @@ class OfacTest < Test::Unit::TestCase
       assert_equal 0, Ofac.new({:name => ''}).score
       assert_equal 0, Ofac.new({:name => ' '}).score
       assert_equal 0, Ofac.new({:name => nil}).score
-      assert_equal 0, Ofac.new({:name => {:first_name => '',:last_name => ' '}}).score
-      assert_equal 0, Ofac.new({:name => {:first_name => '',:last_name => '  '}}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => '', :last_name => ' '}}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => '', :last_name => '  '}}).score
       assert_equal 0, Ofac.new({:name => 'P T'}).score
     end
 
     should "give a score of 0 if there is no name match" do
       assert_equal 0, Ofac.new({:name => 'Kevin T P'}).score
       assert_equal 0, Ofac.new({:name => "O'Brian"}).score
-      assert_equal 0, Ofac.new({:name => {:first_name => 'Matthew',:last_name => "O'Brian"}}).score
+      assert_equal 0, Ofac.new({:name => {:first_name => 'Matthew', :last_name => "O'Brian"}}).score
       assert_equal 0, Ofac.new({:name => 'Kevin', :address => '123 somewhere ln', :city => 'Clearwater'}).score
     end
 
@@ -66,7 +66,7 @@ class OfacTest < Test::Unit::TestCase
     should "give a partial score if there is a partial name match" do
       assert_equal 40, Ofac.new({:name => 'Oscar middlename Hernandez'}).score
       assert_equal 30, Ofac.new({:name => 'Oscar WrongLastName'}).score
-      assert_equal 70, Ofac.new({:name => 'Oscar middlename Hernandez',:city => 'Clearwater'}).score
+      assert_equal 70, Ofac.new({:name => 'Oscar middlename Hernandez', :city => 'Clearwater'}).score
     end
 
     should "give a score of 90 if there is a name and city match" do
@@ -104,35 +104,44 @@ class OfacTest < Test::Unit::TestCase
       assert sdn.score > 0
     end
 
-    should "db_hit? should return true if name is an exact match in the database" do
-      
-      sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
-      assert sdn.db_hit?
+    context '#db_hit?' do
+      should "return true if name is an exact match or partial match in the database" do
 
-      sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
-      assert sdn.db_hit?
+        sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert sdn.db_hit?
 
-      #single initials are ignored
-      sdn = Ofac.new({:name => 'Oscar M Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
-      assert sdn.db_hit?
+        sdn = Ofac.new({:name => {:first_name => 'Os', :last_name => 'Her'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert sdn.db_hit?
 
-      #city and address are ignored
-      sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'bad city', :address => 'bad address'})
-      assert sdn.db_hit?
+        sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert sdn.db_hit?
+
+        #single initials are ignored
+        sdn = Ofac.new({:name => 'Oscar M Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert sdn.db_hit?
+
+        #city and address are ignored
+        sdn = Ofac.new({:name => 'Oscar Hernandez', :city => 'bad city', :address => 'bad address'})
+        assert sdn.db_hit?
+      end
+
+      should "should be case insensitive for the name" do
+        sdn = Ofac.new({:name => {:first_name => 'OSCAR', :last_name => 'hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert sdn.db_hit?
+      end
+
+      should "return false if name is not an exact match in the database" do
+
+        sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'de la Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert !sdn.db_hit?
+
+        sdn = Ofac.new({:name => 'Oscar Maria Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+        assert !sdn.db_hit?
+
+        #city and address are ignored
+        sdn = Ofac.new({:name => 'Oscar de la Hernandez', :city => 'bad city', :address => 'bad address'})
+        assert !sdn.db_hit?
+      end
     end
-
-    should "db_hit? should return false if name is not an exact match in the database" do
-
-      sdn = Ofac.new({:name => {:first_name => 'Oscar', :last_name => 'de la Hernandez'}, :city => 'Clearwater', :address => '123 somewhere ln'})
-      assert !sdn.db_hit?
-
-      sdn = Ofac.new({:name => 'Oscar Maria Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
-      assert !sdn.db_hit?
-
-      #city and address are ignored
-      sdn = Ofac.new({:name => 'Oscar de la Hernandez', :city => 'bad city', :address => 'bad address'})
-      assert !sdn.db_hit?
-    end
-
   end
 end

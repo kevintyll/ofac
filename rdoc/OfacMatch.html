@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class OfacMatch - ofac 1.3.1</title>
+<title>class OfacMatch - ofac 2.0.0</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -43,6 +43,8 @@
 </nav>
 
 
+  
+
   <div id="file-metadata">
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
@@ -64,15 +66,16 @@
 </nav>
 
     
+    
     <!-- Method Quickref -->
 <nav id="method-list-section" class="section">
   <h3 class="section-header">Methods</h3>
 
   <ul class="link-list">
     
-    <li><a href="#method-c-new">::new</a>
+    <li ><a href="#method-c-new">::new</a>
     
-    <li><a href="#method-i-score">#score</a>
+    <li ><a href="#method-i-score">#score</a>
     
   </ul>
 </nav>
@@ -95,17 +98,17 @@
 
   <ul class="link-list">
   
-    <li><a href="./OfacMigration.html">OfacMigration</a>
-  
-    <li><a href="./OfacMigration/Generators.html">OfacMigration::Generators</a>
-  
-    <li><a href="./OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
-  
     <li><a href="./CreateOfacSdns.html">CreateOfacSdns</a>
   
     <li><a href="./Ofac.html">Ofac</a>
   
     <li><a href="./OfacMatch.html">OfacMatch</a>
+  
+    <li><a href="./OfacMigration.html">OfacMigration</a>
+  
+    <li><a href="./OfacMigration/Generators.html">OfacMigration::Generators</a>
+  
+    <li><a href="./OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
   
     <li><a href="./OfacSdn.html">OfacSdn</a>
   
@@ -169,7 +172,9 @@
         <div class="method-heading">
           <span class="method-name">new</span><span
             class="method-args">(stats={})</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
@@ -179,18 +184,19 @@
 Each key in the hash, also has a data hash value for the weight, token, and
 type.</p>
 
-<pre class="ruby">   <span class="ruby-identifier">match</span> = <span class="ruby-constant">Ofac</span><span class="ruby-operator">::</span><span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>({:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Kevin Tyll'</span>},
-       :<span class="ruby-identifier">city</span>   =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">40</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Clearwater'</span>,     },
-       :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">40</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'1234 Park St.'</span>,    },
-       :<span class="ruby-identifier">zip</span>    =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'33759'</span>, :<span class="ruby-identifier">type</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">number</span>}})
+<pre class="ruby">   <span class="ruby-identifier">match</span> = <span class="ruby-constant">Ofac</span><span class="ruby-operator">::</span><span class="ruby-constant">Match</span>.<span class="ruby-identifier">new</span>({:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Kevin Tyll&#39;</span>},
+       :<span class="ruby-identifier">city</span>   =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">40</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Clearwater&#39;</span>,     },
+       :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">40</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;1234 Park St.&#39;</span>,    },
+       :<span class="ruby-identifier">zip</span>    =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">weight</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">10</span>, :<span class="ruby-identifier">token</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;33759&#39;</span>, :<span class="ruby-identifier">type</span> =<span class="ruby-operator">&gt;</span> :<span class="ruby-identifier">number</span>}})
 
 <span class="ruby-identifier">data</span> <span class="ruby-identifier">hash</span> <span class="ruby-identifier">keys</span><span class="ruby-operator">:</span>
-  * <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">weight</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">%rtt&gt; - value to apply to the score if there is a match (Default is 100/</span><span class="ruby-identifier">umber</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">keys</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">record</span> <span class="ruby-identifier">hash</span>)
-  * <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">token</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">%rtt&gt; - string to match
+  <span class="ruby-operator">*</span> <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">weight</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">/tt&gt; - value to apply to the score if there is a match (Default is 100/</span><span class="ruby-identifier">umber</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">keys</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">record</span> <span class="ruby-identifier">hash</span>)
+  <span class="ruby-operator">*</span> <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">token</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">/tt&gt; - string to match
   * &lt;tt&gt;data[:match]&lt;/</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">set</span> <span class="ruby-identifier">from</span> <span class="ruby-identifier">records</span> <span class="ruby-identifier">hash</span>
-  * <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">score</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">%rtt&gt; - output field
+  <span class="ruby-operator">*</span> <span class="ruby-operator">&lt;</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span><span class="ruby-identifier">data</span>[:<span class="ruby-identifier">score</span>]<span class="ruby-operator">&lt;</span><span class="ruby-regexp">/tt&gt; - output field
   * &lt;tt&gt;data[:type]&lt;/</span><span class="ruby-identifier">tt</span><span class="ruby-operator">&gt;</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">the</span> <span class="ruby-identifier">type</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">match</span> <span class="ruby-identifier">that</span> <span class="ruby-identifier">should</span> <span class="ruby-identifier">be</span> <span class="ruby-identifier">performed</span> (<span class="ruby-identifier">valid</span> <span class="ruby-identifier">values</span> <span class="ruby-identifier">are</span> <span class="ruby-operator">+</span>:<span class="ruby-identifier">sound</span><span class="ruby-operator">+</span> <span class="ruby-operator">|</span> <span class="ruby-operator">+</span>:<span class="ruby-identifier">number</span><span class="ruby-operator">+</span>) (<span class="ruby-constant">Default</span> <span class="ruby-identifier">is</span> <span class="ruby-operator">+</span>:<span class="ruby-identifier">sound</span><span class="ruby-operator">+</span>)
 </pre>
+          
           
 
           
@@ -203,7 +209,7 @@ type.</p>
   <span class="ruby-identifier">weight</span> = <span class="ruby-value">100</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@stats</span>.<span class="ruby-identifier">length</span> <span class="ruby-keyword">if</span> <span class="ruby-ivar">@stats</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>
   <span class="ruby-ivar">@stats</span>.<span class="ruby-identifier">each_value</span> <span class="ruby-keyword">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">data</span><span class="ruby-operator">|</span>
     <span class="ruby-identifier">data</span>[<span class="ruby-value">:weight</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">weight</span>
-    <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>]  <span class="ruby-operator">||=</span> <span class="ruby-string">''</span>
+    <span class="ruby-identifier">data</span>[<span class="ruby-value">:match</span>]  <span class="ruby-operator">||=</span> <span class="ruby-string">&#39;&#39;</span>
     <span class="ruby-identifier">data</span>[<span class="ruby-value">:type</span>]   <span class="ruby-operator">||=</span> <span class="ruby-value">:sound</span>
     <span class="ruby-identifier">data</span>[<span class="ruby-value">:score</span>]  <span class="ruby-operator">||=</span> <span class="ruby-value">0</span>
     <span class="ruby-identifier">data</span>[<span class="ruby-value">:token</span>]  = <span class="ruby-identifier">data</span>[<span class="ruby-value">:token</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>
@@ -230,7 +236,9 @@ type.</p>
         <div class="method-heading">
           <span class="method-name">score</span><span
             class="method-args">(match_records)</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
@@ -242,6 +250,7 @@ type.</p>
 
 <p>score will return the highest score of all the records that are sent in
 match_records.</p>
+          
           
 
           
@@ -284,7 +293,7 @@ match_records.</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 4.0.0.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 

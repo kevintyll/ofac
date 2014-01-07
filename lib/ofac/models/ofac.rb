@@ -1,6 +1,6 @@
 class Ofac
 
-  
+
   # Accepts a hash with the identity's demographic information
   #
   #   Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
@@ -92,27 +92,15 @@ class Ofac
       #first get a list from the database of possible matches by name
       #this query is pretty liberal, we just want to get a list of possible
       #matches from the database that we can run through our ruby matching algorithm
-      possible_sdns = []
+      hit = false
       name_array = process_name
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        sql_name_partial = name_array.collect {|partial_name| ["lower(name) like ?", "%#{partial_name.downcase}%"]}
-        sql_alt_name_partial = name_array.collect {|partial_name| ["lower(alternate_identity_name) like ?", "%#{partial_name.downcase}%"]}
-        
-        name_conditions = sql_name_partial.transpose
-        name_values = name_conditions.second
-        name_conditions = [name_conditions.first.join(' and ')]
-        alt_name_conditions = sql_alt_name_partial.transpose
-        alt_name_values = alt_name_conditions.second
-        alt_name_conditions = [alt_name_conditions.first.join(' and ')]
-        conditions = ["(#{name_conditions}) or (#{alt_name_conditions})"] + name_values + alt_name_values
-
-        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
-        
+        hit = OfacSdn.possible_sdns(name_array).exists?
       end
     end
-    !possible_sdns.empty?
+    hit
   end
 
   # Returns an array of hashes of records in the OFAC data that found partial matches with that record's score.
@@ -134,7 +122,7 @@ class Ofac
 
   def calculate_score
     unless @identity[:name].to_s.blank?
-      
+
       #first get a list from the database of possible matches by name
       #this query is pretty liberal, we just want to get a list of possible
       #matches from the database that we can run through our ruby matching algorithm
@@ -143,15 +131,9 @@ class Ofac
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        sql_name_partial = name_array.collect {|partial_name| ["lower(name) like ?", "%#{partial_name.downcase}%"]}
-        sql_alt_name_partial = name_array.collect {|partial_name| ["lower(alternate_identity_name) like ?", "%#{partial_name.downcase}%"]}
-        conditions = sql_name_partial + sql_alt_name_partial
-        conditions = conditions.transpose
-        conditions = [conditions.first.join(' or ')] + conditions.second
-
-        possible_sdns = OfacSdn.find_all_by_sdn_type('individual',:select => 'name, alternate_identity_name, address, city', :conditions => conditions)
+        possible_sdns = OfacSdn.possible_sdns(name_array, use_ors = true)
         possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
-     
+
         match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(', ')}"},
             :address => {:weight => 10, :token => @identity[:address]},
             :city => {:weight => 30, :token => @identity[:city]}})

@@ -4,7 +4,7 @@
 <head>
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 
-<title>class Ofac - ofac 1.3.1</title>
+<title>class Ofac - ofac 2.0.0</title>
 
 <link type="text/css" media="screen" href="./rdoc.css" rel="stylesheet">
 
@@ -43,6 +43,8 @@
 </nav>
 
 
+  
+
   <div id="file-metadata">
     <nav id="file-list-section" class="section">
   <h3 class="section-header">Defined In</h3>
@@ -64,19 +66,20 @@
 </nav>
 
     
+    
     <!-- Method Quickref -->
 <nav id="method-list-section" class="section">
   <h3 class="section-header">Methods</h3>
 
   <ul class="link-list">
     
-    <li><a href="#method-c-new">::new</a>
+    <li ><a href="#method-c-new">::new</a>
     
-    <li><a href="#method-i-db_hit-3F">#db_hit?</a>
+    <li ><a href="#method-i-db_hit-3F">#db_hit?</a>
     
-    <li><a href="#method-i-possible_hits">#possible_hits</a>
+    <li ><a href="#method-i-possible_hits">#possible_hits</a>
     
-    <li><a href="#method-i-score">#score</a>
+    <li ><a href="#method-i-score">#score</a>
     
   </ul>
 </nav>
@@ -99,17 +102,17 @@
 
   <ul class="link-list">
   
-    <li><a href="./OfacMigration.html">OfacMigration</a>
-  
-    <li><a href="./OfacMigration/Generators.html">OfacMigration::Generators</a>
-  
-    <li><a href="./OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
-  
     <li><a href="./CreateOfacSdns.html">CreateOfacSdns</a>
   
     <li><a href="./Ofac.html">Ofac</a>
   
     <li><a href="./OfacMatch.html">OfacMatch</a>
+  
+    <li><a href="./OfacMigration.html">OfacMigration</a>
+  
+    <li><a href="./OfacMigration/Generators.html">OfacMigration::Generators</a>
+  
+    <li><a href="./OfacMigration/Generators/BuildGenerator.html">OfacMigration::Generators::BuildGenerator</a>
   
     <li><a href="./OfacSdn.html">OfacSdn</a>
   
@@ -153,15 +156,17 @@
         <div class="method-heading">
           <span class="method-name">new</span><span
             class="method-args">(identity)</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
         <div class="method-description">
           
-          <p>Accepts a hash with the identity’s demographic information</p>
+          <p>Accepts a hash with the identity&#39;s demographic information</p>
 
-<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>({:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Oscar Hernandez'</span>, :<span class="ruby-identifier">city</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Clearwater'</span>, :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'123 somewhere ln'</span>})
+<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>({:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Oscar Hernandez&#39;</span>, :<span class="ruby-identifier">city</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Clearwater&#39;</span>, :<span class="ruby-identifier">address</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;123 somewhere ln&#39;</span>})
 </pre>
 
 <p><code>:name</code> is required to get a score.  If <code>:name</code> is
@@ -169,12 +174,12 @@ missing, an error will not be thrown, but a score of 0 will be returned.</p>
 
 <p>You can pass a string in for the full name:</p>
 
-<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Victor De La Garza'</span>)
+<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Victor De La Garza&#39;</span>)
 </pre>
 
 <p>Or you can specify the last and first names</p>
 
-<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">first_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'Victor'</span>, :<span class="ruby-identifier">last_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'De La Garza'</span>})
+<pre class="ruby"><span class="ruby-constant">Ofac</span>.<span class="ruby-identifier">new</span>(:<span class="ruby-identifier">name</span> =<span class="ruby-operator">&gt;</span> {:<span class="ruby-identifier">first_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;Victor&#39;</span>, :<span class="ruby-identifier">last_name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">&#39;De La Garza&#39;</span>})
 </pre>
 
 <p>The first method will build a larger list of names for ruby to parse
@@ -195,6 +200,7 @@ business, or marine vessel</p>
 </li><li>
 <p><code>:city</code> (weighting = 30%)</p>
 </li></ul>
+          
           
 
           
@@ -224,11 +230,14 @@ business, or marine vessel</p>
         <div class="method-heading">
           <span class="method-name">db_hit?</span><span
             class="method-args">()</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
         <div class="method-description">
+          
           
           
           
@@ -242,27 +251,15 @@ business, or marine vessel</p>
     <span class="ruby-comment">#first get a list from the database of possible matches by name</span>
     <span class="ruby-comment">#this query is pretty liberal, we just want to get a list of possible</span>
     <span class="ruby-comment">#matches from the database that we can run through our ruby matching algorithm</span>
-    <span class="ruby-identifier">possible_sdns</span> = []
+    <span class="ruby-identifier">hit</span> = <span class="ruby-keyword">false</span>
     <span class="ruby-identifier">name_array</span> = <span class="ruby-identifier">process_name</span>
 
     <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">delete_if</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">n</span>.<span class="ruby-identifier">strip</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">2</span>}
     <span class="ruby-keyword">unless</span> <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">empty?</span>
-      <span class="ruby-identifier">sql_name_partial</span> = <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">partial_name</span><span class="ruby-operator">|</span> [<span class="ruby-string">&quot;name like ?&quot;</span>, <span class="ruby-node">&quot;%#{partial_name}%&quot;</span>]}
-      <span class="ruby-identifier">sql_alt_name_partial</span> = <span class="ruby-identifier">name_array</span>.<span class="ruby-identifier">collect</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">partial_name</span><span class="ruby-operator">|</span> [<span class="ruby-string">&quot;alternate_identity_name like ?&quot;</span>, <span class="ruby-node">&quot;%#{partial_name}%&quot;</span>]}
-      
-      <span class="ruby-identifier">name_conditions</span> = <span class="ruby-identifier">sql_name_partial</span>.<span class="ruby-identifier">transpose</span>
-      <span class="ruby-identifier">name_values</span> = <span class="ruby-identifier">name_conditions</span>.<span class="ruby-identifier">second</span>
-      <span class="ruby-identifier">name_conditions</span> = [<span class="ruby-identifier">name_conditions</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">' and '</span>)]
-      <span class="ruby-identifier">alt_name_conditions</span> = <span class="ruby-identifier">sql_alt_name_partial</span>.<span class="ruby-identifier">transpose</span>
-      <span class="ruby-identifier">alt_name_values</span> = <span class="ruby-identifier">alt_name_conditions</span>.<span class="ruby-identifier">second</span>
-      <span class="ruby-identifier">alt_name_conditions</span> = [<span class="ruby-identifier">alt_name_conditions</span>.<span class="ruby-identifier">first</span>.<span class="ruby-identifier">join</span>(<span class="ruby-string">' and '</span>)]
-      <span class="ruby-identifier">conditions</span> = [<span class="ruby-node">&quot;(#{name_conditions}) or (#{alt_name_conditions})&quot;</span>] <span class="ruby-operator">+</span> <span class="ruby-identifier">name_values</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">alt_name_values</span>
-
-      <span class="ruby-identifier">possible_sdns</span> = <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">find_all_by_sdn_type</span>(<span class="ruby-string">'individual'</span>,<span class="ruby-value">:select</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-string">'name, alternate_identity_name, address, city'</span>, <span class="ruby-value">:conditions</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">conditions</span>)
-      
+      <span class="ruby-identifier">hit</span> = <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">possible_sdns</span>(<span class="ruby-identifier">name_array</span>).<span class="ruby-identifier">exists?</span>
     <span class="ruby-keyword">end</span>
   <span class="ruby-keyword">end</span>
-  <span class="ruby-operator">!</span><span class="ruby-identifier">possible_sdns</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-identifier">hit</span>
 <span class="ruby-keyword">end</span></pre>
           </div><!-- db_hit-3F-source -->
           
@@ -279,15 +276,17 @@ business, or marine vessel</p>
         <div class="method-heading">
           <span class="method-name">possible_hits</span><span
             class="method-args">()</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
         <div class="method-description">
           
-          <pre class="ruby"><span class="ruby-constant">Returns</span> <span class="ruby-identifier">an</span> <span class="ruby-identifier">array</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">hashes</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">records</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">the</span> <span class="ruby-constant">OFAC</span> <span class="ruby-identifier">data</span> <span class="ruby-identifier">that</span> <span class="ruby-identifier">found</span> <span class="ruby-identifier">partial</span> <span class="ruby-identifier">matches</span> <span class="ruby-identifier">with</span> <span class="ruby-identifier">that</span> <span class="ruby-identifier">record</span><span class="ruby-string">'s score.
+          <pre class="ruby"><span class="ruby-constant">Returns</span> <span class="ruby-identifier">an</span> <span class="ruby-identifier">array</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">hashes</span> <span class="ruby-identifier">of</span> <span class="ruby-identifier">records</span> <span class="ruby-keyword">in</span> <span class="ruby-identifier">the</span> <span class="ruby-constant">OFAC</span> <span class="ruby-identifier">data</span> <span class="ruby-identifier">that</span> <span class="ruby-identifier">found</span> <span class="ruby-identifier">partial</span> <span class="ruby-identifier">matches</span> <span class="ruby-identifier">with</span> <span class="ruby-identifier">that</span> <span class="ruby-identifier">record</span><span class="ruby-string">&#39;s score.
 
-    Ofac.new({:name =&gt; '</span><span class="ruby-constant">Oscar</span> <span class="ruby-constant">Hernandez</span><span class="ruby-string">', :city =&gt; '</span><span class="ruby-constant">Clearwater</span><span class="ruby-string">', :address =&gt; '</span><span class="ruby-value">123</span> <span class="ruby-identifier">somewhere</span> <span class="ruby-identifier">ln</span><span class="ruby-string">'}).possible_hits
+    Ofac.new({:name =&gt; &#39;</span><span class="ruby-constant">Oscar</span> <span class="ruby-constant">Hernandez</span><span class="ruby-string">&#39;, :city =&gt; &#39;</span><span class="ruby-constant">Clearwater</span><span class="ruby-string">&#39;, :address =&gt; &#39;</span><span class="ruby-value">123</span> <span class="ruby-identifier">somewhere</span> <span class="ruby-identifier">ln</span><span class="ruby-string">&#39;}).possible_hits
 </span></pre>
 
 <p>returns</p>
@@ -295,10 +294,11 @@ business, or marine vessel</p>
 <pre class="ruby">[{:<span class="ruby-identifier">address=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;123 Somewhere Ln&quot;</span>, :<span class="ruby-identifier">score=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">100</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;HERNANDEZ, Oscar|GUAMATUR, S.A.&quot;</span>, :<span class="ruby-identifier">city=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;Clearwater&quot;</span>}, {:<span class="ruby-identifier">address=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;123 Somewhere Ln&quot;</span>, :<span class="ruby-identifier">score=</span><span class="ruby-operator">&gt;</span><span class="ruby-value">100</span>, :<span class="ruby-identifier">name=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;HERNANDEZ, Oscar|Alternate Name&quot;</span>, :<span class="ruby-identifier">city=</span><span class="ruby-operator">&gt;</span><span class="ruby-string">&quot;Clearwater&quot;</span>}]
 </pre>
           
+          
 
           
           <div class="method-source-code" id="possible_hits-source">
-            <pre><span class="ruby-comment"># File lib/ofac/models/ofac.rb, line 124</span>
+            <pre><span class="ruby-comment"># File lib/ofac/models/ofac.rb, line 112</span>
 <span class="ruby-keyword">def</span> <span class="ruby-identifier">possible_hits</span>
   <span class="ruby-ivar">@possible_hits</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">retrieve_possible_hits</span>
 <span class="ruby-keyword">end</span></pre>
@@ -317,7 +317,9 @@ business, or marine vessel</p>
         <div class="method-heading">
           <span class="method-name">score</span><span
             class="method-args">()</span>
+          
           <span class="method-click-advice">click to toggle source</span>
+          
         </div>
         
 
@@ -330,14 +332,14 @@ data on the SDN (Specially Designated Nationals) list.</p>
 matched. So if only name is matched, then the max score is the weight for
 <code>:name</code> which is 60</p>
 
-<p>It’s possible to get partial matches, which will add partial weight to the
-score.  If there is not a match on the element as it is passed in, then
+<p>It&#39;s possible to get partial matches, which will add partial weight to
+the score.  If there is not a match on the element as it is passed in, then
 each word element gets broken down and matches are tried on each partial
 element.  The weighting is distrubuted equally for each partial that is
 matched.</p>
 
 <p>If exact matches are not made, then a sounds like match is attempted.  Any
-match made by sounds like is given 75% of it’s weight to the score.</p>
+match made by sounds like is given 75% of it&#39;s weight to the score.</p>
 
 <p>Example:</p>
 
@@ -374,13 +376,13 @@ and since Tyll was a sounds like match, it will add 30 * .75.  So the
 
 <p>If data is in the database for city and or address, and you pass data in
 for these elements, the score will be reduced by 10% of the weight if there
-is no match or sounds like match.  So if you get a match on name, you’ve
-already got a score of 60.  So if you don’t pass in an address or city, or
-if you do, but there is no city or address info in the database, then your
-final score will be 60.  But if you do pass in a city, say Tampa, and the
-city in the Database is New York, then we will deduct 10% of the weight (30
-* .1) = 3 from the score since 30 is the weight for <code>:city</code>.  So
-the final score will be 57.</p>
+is no match or sounds like match.  So if you get a match on name,
+you&#39;ve already got a score of 60.  So if you don&#39;t pass in an
+address or city, or if you do, but there is no city or address info in the
+database, then your final score will be 60.  But if you do pass in a city,
+say Tampa, and the city in the Database is New York, then we will deduct
+10% of the weight (30 * .1) = 3 from the score since 30 is the weight for
+<code>:city</code>.  So the final score will be 57.</p>
 
 <p>If were searching for New York, and the database had New Deli, then there
 would be a match on New, but not on Deli. Since there were 2 elements in
@@ -398,6 +400,7 @@ database.</p>
 to the score if there is first a match on <code>:name</code>.</p>
 
 <p>We consider a score of 60 to be reasonable as a hit.</p>
+          
           
 
           
@@ -425,7 +428,7 @@ to the score if there is first a match on <code>:name</code>.</p>
 
 <footer id="validator-badges">
   <p><a href="http://validator.w3.org/check/referer">[Validate]</a>
-  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 3.12.
+  <p>Generated by <a href="https://github.com/rdoc/rdoc">RDoc</a> 4.0.0.
   <p>Generated with the <a href="http://deveiate.org/projects/Darkfish-Rdoc/">Darkfish Rdoc Generator</a> 3.
 </footer>
 
