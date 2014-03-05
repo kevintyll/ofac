@@ -41,7 +41,7 @@ class OfacSdnLoader
     alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
     alt.rewind
 
-    if OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) || OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter)
+    if (defined?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) && OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter)) || (defined?(ActiveRecord::ConnectionAdapters::JdbcAdapter) && OfacSdn.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter))
       puts "Converting file to csv format for Mysql import.  This could take several minutes."
       yield "Converting file to csv format for Mysql import.  This could take several minutes." if block_given?
 
