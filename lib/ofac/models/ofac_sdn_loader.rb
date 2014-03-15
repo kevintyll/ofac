@@ -319,7 +319,7 @@ class OfacSdnLoader
     yield "Deleting all records in ofac_sdn..." if block_given?
 
     #OFAC data is a complete list, so we have to dump and load
-    OfacSdn.delete_all
+    OfacSdn.connection.execute("TRUNCATE ofac_sdns;")
 
     puts "Importing into Mysql..."
     yield "Importing into Mysql..." if block_given?
