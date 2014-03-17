@@ -30,7 +30,7 @@ class OfacSdnLoaderTest < Test::Unit::TestCase
         csv_line = generated_file[i]
         correctly_formatted_record_array = line.split('|')
         csv_record_array = csv_line.split('|')
-        (0..18).each do |i| #skip indices 19 and 20, they are the created_at and updated_at fields, they will never match.
+        (0..17).each do |i| #skip indices 19 and 20, they are the created_at and updated_at fields, they will never match.
           assert_equal correctly_formatted_record_array[i], csv_record_array[i]
         end
       end
