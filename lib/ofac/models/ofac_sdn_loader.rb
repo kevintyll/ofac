@@ -12,8 +12,6 @@ rescue Gem::LoadError, LoadError
 end
 
 class OfacSdnLoader
-  @@db_time = Time.now.to_s(:db)
-
   #Loads the most recent file from http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml
   def self.load_current_sdn_file
     puts "Reloading OFAC sdn data"
@@ -191,9 +189,9 @@ class OfacSdnLoader
         #    :alternate_identity_remarks
         "`#{record_hash[:alternate_identity_remarks]}`|" +
         #:created_at
-        "`#{@@db_time}`|" +
+        "`#{@db_time}`|" +
         # updated_at
-        "`#{@@db_time}`" + "\n"
+        "`#{@db_time}`" + "\n"
 
     new_line
   end
@@ -202,8 +200,10 @@ class OfacSdnLoader
     @address = address_file
     @alt = alt_file
 
+    @db_time = Time.now.to_s(:db)
+
     csv_file = Tempfile.new("ofac") # create temp file for converted csv format.
-                                    #get the first line from the address and alt files
+    #get the first line from the address and alt files
     @current_address_hash = address_text_to_hash(@address.gets)
     @current_alt_hash = alt_text_to_hash(@alt.gets)
 
