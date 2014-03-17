@@ -161,7 +161,7 @@ href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www
 
           
           <div class="method-source-code" id="load_current_sdn_file-source">
-            <pre><span class="ruby-comment"># File lib/ofac/models/ofac_sdn_loader.rb, line 18</span>
+            <pre><span class="ruby-comment"># File lib/ofac/models/ofac_sdn_loader.rb, line 16</span>
 <span class="ruby-keyword">def</span> <span class="ruby-keyword">self</span>.<span class="ruby-identifier">load_current_sdn_file</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Reloading OFAC sdn data&quot;</span>
   <span class="ruby-identifier">puts</span> <span class="ruby-string">&quot;Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn&quot;</span>
@@ -169,7 +169,6 @@ href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www
   <span class="ruby-comment">#get the 3 data files</span>
   <span class="ruby-identifier">sdn</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-string">&#39;sdn&#39;</span>)
   <span class="ruby-identifier">uri</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-string">&#39;http://www.treasury.gov/ofac/downloads/sdn.pip&#39;</span>)
-
   <span class="ruby-identifier">proxy_addr</span>, <span class="ruby-identifier">proxy_port</span> = <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;http_proxy&#39;</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-string">&quot;http://&quot;</span>, <span class="ruby-string">&quot;&quot;</span>).<span class="ruby-identifier">split</span>(<span class="ruby-regexp">/:/</span>) <span class="ruby-keyword">if</span> <span class="ruby-constant">ENV</span>[<span class="ruby-string">&#39;http_proxy&#39;</span>]
 
   <span class="ruby-identifier">bytes</span> = <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span><span class="ruby-operator">::</span><span class="ruby-constant">Proxy</span>(<span class="ruby-identifier">proxy_addr</span>, <span class="ruby-identifier">proxy_port</span>).<span class="ruby-identifier">get</span>(<span class="ruby-identifier">uri</span>))
