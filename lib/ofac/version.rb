@@ -1,1 +1,3 @@
-VERSION = '2.0.4'
+module Ofac
+  VERSION = '2.0.4'
+end

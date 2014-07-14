@@ -1,9 +1,8 @@
-require 'rake'
-require 'ofac/ruby_string_extensions'
-require 'ofac/ofac_match'
-require 'ofac/models/ofac_sdn'
-require 'ofac/models/ofac_sdn_loader'
-require 'ofac/models/ofac'
+require 'ofac/engine'
 
-# Load rake file
-load "#{File.dirname(__FILE__)}/tasks/ofac.rake"
+module Ofac
+  # the Ofac module conflicts with the old Ofac class.  Add a new method to the module for backward compatibility
+  def self.new(identity)
+    OfacIndividual.new(identity)
+  end
+end

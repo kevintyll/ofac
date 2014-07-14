@@ -1,9 +1,9 @@
 For more information on ofac, see http://kevintyll.github.com/ofac/
 
 * To create the necessary db migration, from the command line, run:
-    script/generate ofac_migration
+    rake ofac_engine:install:migrations
 * Require the gem in your environment.rb file in the Rails::Initializer block:
-    config.gem 'kevintyll-ofac', :lib => 'ofac'
+    config.gem 'ofac'
 * To load your table with the current OFAC data, from the command line, run:
     rake ofac:update_data
 
