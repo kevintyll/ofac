@@ -1,3 +1,16 @@
+== 3.0.0 2014-07-17
+
+*  Complete overhaul:
+   Converted to a rails engine.
+   Since this gem only deals with sdn type of individuals, I optimized the db calls to individuals only.
+     Now using a new table ofac_sdn_individuals which replaces ofac_sdn.
+     Copy new migrations into your app with bin/rake ofac_engine:install:migrations
+     Only loading the individual records into this table
+     Using the new table structure to eliminate the like predicate in the SQL.
+     Changed class names as appropriate.
+       Ofac.new still works, but proper use is now OfacIndividual.new
+   The scoring algorithm is unchanged.
+
 == 2.0.3 2014-03-17
 
 *  1 enhancement:

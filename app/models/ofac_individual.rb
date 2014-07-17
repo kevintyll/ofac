@@ -3,15 +3,15 @@ class OfacIndividual
 
   # Accepts a hash with the identity's demographic information
   #
-  #   Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
+  #   OfacIndividual.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'})
   #
   # <tt>:name</tt> is required to get a score.  If <tt>:name</tt> is missing, an error will not be thrown, but a score of 0 will be returned.
   #
   # You can pass a string in for the full name:
-  #   Ofac.new(:name => 'Victor De La Garza')
+  #   OfacIndividual.new(:name => 'Victor De La Garza')
   #
   # Or you can specify the last and first names
-  #   Ofac.new(:name => {:first_name => 'Victor', :last_name => 'De La Garza'})
+  #   OfacIndividual.new(:name => {:first_name => 'Victor', :last_name => 'De La Garza'})
   #
   # The first method will build a larger list of names for ruby to parse through and more likely to find similar names.
   # The second method is quicker.
@@ -22,7 +22,7 @@ class OfacIndividual
   #
   # Acceptable hash keys and their weighting in score calculation:
   #
-  # * <tt>:name</tt> (weighting = 60%) (required) This can be a person, business, or marine vessel
+  # * <tt>:name</tt> (weighting = 60%) (required) This must be a person
   # * <tt>:address</tt> (weighting = 10%)
   # * <tt>:city</tt> (weighting = 30%)
   def initialize(identity)
@@ -97,7 +97,7 @@ class OfacIndividual
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        hit = OfacSdn.possible_sdns(name_array).exists?
+        hit = OfacSdnIndividual.possible_sdns(name_array).exists?
       end
     end
     hit
@@ -105,7 +105,7 @@ class OfacIndividual
 
   # Returns an array of hashes of records in the OFAC data that found partial matches with that record's score.
   # 
-  #     Ofac.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).possible_hits
+  #     OfacIndividual.new({:name => 'Oscar Hernandez', :city => 'Clearwater', :address => '123 somewhere ln'}).possible_hits
   #returns
   #     [{:address=>"123 Somewhere Ln", :score=>100, :name=>"HERNANDEZ, Oscar|GUAMATUR, S.A.", :city=>"Clearwater"}, {:address=>"123 Somewhere Ln", :score=>100, :name=>"HERNANDEZ, Oscar|Alternate Name", :city=>"Clearwater"}]
   #
@@ -131,8 +131,8 @@ class OfacIndividual
 
       name_array.delete_if{|n| n.strip.size < 2}
       unless name_array.empty?
-        possible_sdns = OfacSdn.possible_sdns(name_array, use_ors = true)
-        possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn['name']}|#{sdn['alternate_identity_name']}", :city => sdn['city'], :address => sdn['address']}}
+        possible_sdns = OfacSdnIndividual.possible_sdns(name_array, use_ors = true)
+        possible_sdns = possible_sdns.collect {|sdn|{:name => "#{sdn.name}|#{sdn.alternate_identity_name}", :city => sdn.city, :address => sdn.address}}
 
         match = OfacMatch.new({:name => {:weight => 60, :token => "#{name_array.join(', ')}"},
             :address => {:weight => 10, :token => @identity[:address]},
@@ -149,11 +149,10 @@ class OfacIndividual
   def process_name
     #you can pass in a full name, or specify the first and last name
     if @identity[:name].kind_of?(Hash)
-      name_array = [@identity[:name][:last_name],@identity[:name][:first_name]].compact
+      (@identity[:name][:last_name].to_s.upcase.gsub(/[[:punct:]]/, '').split(/\W/) + @identity[:name][:first_name].to_s.upcase.gsub(/[[:punct:]]/, '').split(/\W/)).compact
     else
-      partial_name = @identity[:name].gsub(/\W/,'|')
-      name_array = partial_name.split('|').reverse
+      @identity[:name].to_s.upcase.gsub(/[[:punct:]]/, '').split(/\W/).reverse
     end
   end
-
 end
+
