@@ -1,0 +1,158 @@
+<sdnList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://tempuri.org/sdnList.xsd">
+  <publshInformation>
+    <Publish_Date>11/12/2014</Publish_Date>
+    <Record_Count>5819</Record_Count>
+  </publshInformation>
+  <sdnEntry>
+    <uid>10</uid>
+    <lastName>ABASTECEDORA NAVAL Y INDUSTRIAL, S.A.</lastName>
+    <sdnType>Entity</sdnType>
+    <programList>
+      <program>CUBA</program>
+    </programList>
+    <akaList>
+      <aka>
+        <uid>4</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>ANAINSA</lastName>
+      </aka>
+    </akaList>
+    <addressList>
+      <address>
+        <uid>7</uid>
+        <country>Panama</country>
+      </address>
+    </addressList>
+  </sdnEntry>
+  <sdnEntry>
+    <uid>10190</uid>
+    <lastName>
+      ADVANCED TRADING AND CHEMICAL WORKS COMPANY LIMITED
+    </lastName>
+    <sdnType>Entity</sdnType>
+    <programList>
+      <program>SUDAN</program>
+    </programList>
+    <idList>
+      <id>
+        <uid>110004</uid>
+        <idType>Email Address</idType>
+        <idNumber>advance@sudanmail.net</idNumber>
+      </id>
+      <id>
+        <uid>110005</uid>
+        <idType>Email Address</idType>
+        <idNumber>accw@htg-sdn.com</idNumber>
+      </id>
+    </idList>
+    <akaList>
+      <aka>
+        <uid>9919</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>
+          ADVANCED COMMERCIAL AND CHEMICAL WORKS COMPANY LIMITED
+        </lastName>
+      </aka>
+      <aka>
+        <uid>9920</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>ADVANCED CHEMICAL WORKS</lastName>
+      </aka>
+    </akaList>
+    <addressList>
+      <address>
+        <uid>13636</uid>
+        <address1>19 Al Amarat Street</address1>
+        <address2>P.O. Box 44690</address2>
+        <city>Khartoum</city>
+        <country>Sudan</country>
+      </address>
+    </addressList>
+  </sdnEntry>
+  <sdnEntry>
+    <uid>17387</uid>
+    <firstName>Ali Abdullah</firstName>
+    <lastName>SALEH</lastName>
+    <title>
+      President of Yemen's General People's Congress party; Former President of the Republic of Yemen
+    </title>
+    <sdnType>Individual</sdnType>
+    <programList>
+      <program>YEMEN</program>
+    </programList>
+    <idList>
+      <id>
+        <uid>9789</uid>
+        <idType>Identification Number</idType>
+        <idNumber>01010744444</idNumber>
+        <idCountry>Yemen</idCountry>
+      </id>
+      <id>
+        <uid>9790</uid>
+        <idType>Passport</idType>
+        <idNumber>00016161</idNumber>
+        <idCountry>Yemen</idCountry>
+        <issueDate>19 Jun 2012</issueDate>
+        <expirationDate>18 Jun 2018</expirationDate>
+      </id>
+      <id>
+        <uid>116387</uid>
+        <idType>Gender</idType>
+        <idNumber>Male</idNumber>
+      </id>
+    </idList>
+    <akaList>
+      <aka>
+        <uid>26906</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>SALIH</lastName>
+        <firstName>Ali Abdallah</firstName>
+      </aka>
+    </akaList>
+    <nationalityList>
+      <nationality>
+        <uid>16394</uid>
+        <country>Yemen</country>
+        <mainEntry>true</mainEntry>
+      </nationality>
+    </nationalityList>
+    <dateOfBirthList>
+      <dateOfBirthItem>
+        <uid>16388</uid>
+        <dateOfBirth>21 Mar 1945</dateOfBirth>
+        <mainEntry>true</mainEntry>
+      </dateOfBirthItem>
+      <dateOfBirthItem>
+        <uid>16389</uid>
+        <dateOfBirth>21 Mar 1946</dateOfBirth>
+        <mainEntry>false</mainEntry>
+      </dateOfBirthItem>
+      <dateOfBirthItem>
+        <uid>16390</uid>
+        <dateOfBirth>21 Mar 1942</dateOfBirth>
+        <mainEntry>false</mainEntry>
+      </dateOfBirthItem>
+      <dateOfBirthItem>
+        <uid>16391</uid>
+        <dateOfBirth>21 Mar 1947</dateOfBirth>
+        <mainEntry>false</mainEntry>
+      </dateOfBirthItem>
+    </dateOfBirthList>
+    <placeOfBirthList>
+      <placeOfBirthItem>
+        <uid>16392</uid>
+        <placeOfBirth>Bayt al-Ahmar, Sana'a Governorate, Yemen</placeOfBirth>
+        <mainEntry>true</mainEntry>
+      </placeOfBirthItem>
+      <placeOfBirthItem>
+        <uid>16393</uid>
+        <placeOfBirth>Sana'a, Yemen</placeOfBirth>
+        <mainEntry>false</mainEntry>
+      </placeOfBirthItem>
+    </placeOfBirthList>
+  </sdnEntry>
+</sdnList>
