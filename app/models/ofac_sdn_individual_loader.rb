@@ -12,11 +12,11 @@ rescue Gem::LoadError, LoadError
 end
 
 class OfacSdnIndividualLoader
-  #Loads the most recent file from http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml
+  #Loads the most recent file from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx
   def self.load_current_sdn_file
     puts "Reloading OFAC sdn data"
-    puts "Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn"
-    yield "Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn" if block_given?
+    puts "Downloading OFAC data from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx"
+    yield "Downloading OFAC data from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx" if block_given?
     #get the 3 data files
     sdn = Tempfile.new('sdn')
     uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.pip')
