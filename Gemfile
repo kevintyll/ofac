@@ -5,6 +5,8 @@ source 'http://rubygems.org'
 
 gem 'rails', '>=3.2'
 
+gem 'nokogiri'
+
 group :test do
   # Pretty printed test output
   gem 'sqlite3'
