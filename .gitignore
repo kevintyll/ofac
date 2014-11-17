@@ -5,3 +5,6 @@ pkg
 nbproject
 *.idea
 atlassian-ide-plugin.xml
+
+test/dummy/db/
+test/dummy/log/
