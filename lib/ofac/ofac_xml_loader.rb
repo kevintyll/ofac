@@ -11,10 +11,7 @@ class OfacXmlLoader
     doc.xpath('/sdnList/sdnEntry').each do |entry|
       entry.xpath('idList/id[idType = "Email Address"]/idNumber/text()').each do |idNumber|
         uid = entry.at_xpath('uid/text()').to_s.to_i
-        puts "uid = #{uid}"
-
         email = idNumber.to_s
-        puts email
 
         add_email(email, uid)
       end
