@@ -2,6 +2,9 @@ require 'nokogiri'
 
 class OfacXmlLoader
   def load_sdn(file)
+
+    Email.delete_all
+
     doc = Nokogiri::XML(file)
     doc.remove_namespaces!
 
@@ -19,9 +22,8 @@ class OfacXmlLoader
   end
 
   def add_email(email, uid)
-    puts "adding email: email = #{email}, uid = #{uid}"
     sdn = OfacSdnIndividual.find(uid)
     attributes = {email: email, ofac_sdn_individual: sdn}
-    Email.create(attributes) unless Email.exists?(attributes)
+    Email.create(attributes)
   end
 end
