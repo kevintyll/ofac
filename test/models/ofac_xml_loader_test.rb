@@ -2,10 +2,6 @@ require File.expand_path(File.dirname(__FILE__) + "/../test_helper")
 
 class OfacXmlLoaderTest < ActiveSupport::TestCase
 
-  def setup
-    OfacSdnIndividual.create(id: 10190)
-  end
-
   context OfacXmlLoader do
 
     should "load emails from XML multiple times and always have the same record count" do
@@ -14,6 +10,18 @@ class OfacXmlLoaderTest < ActiveSupport::TestCase
       assert_equal(2, Email.count)
       load_test_sdn_file
       assert_equal(2, Email.count)
+    end
+
+    should "give nil ofac_sdn_individual to email object representing company" do  # because only individuals are stored into OfacSdnIndividual
+      load_test_sdn_file
+
+      first = Email.first
+      assert_equal('advance@sudanmail.net', first.email)
+      assert_nil(first.ofac_sdn_individual)
+
+      last = Email.first(2).last
+      assert_equal('accw@htg-sdn.com', last.email)
+      assert_nil(last.ofac_sdn_individual)
     end
 
   end

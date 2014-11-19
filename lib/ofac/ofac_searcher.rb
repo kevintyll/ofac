@@ -25,16 +25,21 @@ class OfacSearcher
   end
 
   def search_phone_hits(phone)
-    Phone.where(phone: phone)  # todo: needs better matching
+    Phone.where(phone: phone) # todo: needs better matching
   end
 
   def collect_sdn_hashes(list)
-    list.collect(&:ofac_sdn_individual).collect {|sdn|
-      {
-          :name => "#{sdn.name}|#{sdn.alternate_identity_name}",
-          :city => sdn.city,
-          :address => sdn.address
-      }
+    list.collect(&:ofac_sdn_individual).collect { |sdn|
+
+      if sdn
+        {
+            :name => "#{sdn.name}|#{sdn.alternate_identity_name}",
+            :city => sdn.city,
+            :address => sdn.address
+        }
+      else
+        {}
+      end
     }
   end
 end

@@ -20,8 +20,7 @@ class OfacXmlLoader
   end
 
   def add_email(email, uid)
-    sdn = OfacSdnIndividual.find(uid)
-    attributes = {email: email, ofac_sdn_individual: sdn}
-    Email.create(attributes)
+    sdn = OfacSdnIndividual.find_by_id(uid)
+    Email.create({email: email, ofac_sdn_individual: sdn})
   end
 end
