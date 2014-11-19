@@ -8,7 +8,9 @@ class OfacSearcher
     other_hits << collect_sdn_hashes(search_email_hits(params[:email]))
     other_hits << collect_sdn_hashes(search_company_hits(params[:company]))
     other_hits << collect_sdn_hashes(search_website_hits(params[:website]))
-    other_hits << collect_sdn_hashes(search_phone_hits(params[:phone]))
+    # other_hits << collect_sdn_hashes(search_phone_hits(params[:phone]))
+
+
 
   end
 
@@ -24,9 +26,9 @@ class OfacSearcher
     Website.where(website: website)
   end
 
-  def search_phone_hits(phone)
-    Phone.where(phone: phone) # todo: needs better matching
-  end
+  # def search_phone_hits(phone)
+  #   Phone.where(phone: phone) # todo: needs better matching
+  # end
 
   def collect_sdn_hashes(list)
     list.collect(&:ofac_sdn_individual).collect { |sdn|
