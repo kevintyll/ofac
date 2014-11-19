@@ -24,6 +24,10 @@ class OfacXmlLoader
       entry.xpath('akaList/aka/lastName/text()').each do |name|
         add_company(name.to_s)
       end
+
+      entry.xpath('idList/id[idType = "Website"]/idNumber/text()').each do |website|
+        add_website(website.to_s)
+      end
     end
   end
 
@@ -34,5 +38,11 @@ class OfacXmlLoader
 
   def add_company(name)
     Company.create({name: name, ofac_sdn_individual: nil})
+  end
+
+  def add_website(website)
+    website.gsub!(/http:\/\//, '')
+    website.delete!(':/')
+    Website.create({website: website, ofac_sdn_individual: nil})
   end
 end

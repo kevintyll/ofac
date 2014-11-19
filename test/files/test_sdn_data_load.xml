@@ -155,4 +155,66 @@
       </placeOfBirthItem>
     </placeOfBirthList>
   </sdnEntry>
+  <sdnEntry>
+    <uid>16016</uid>
+    <lastName>CYLINDER SYSTEM L.T.D.</lastName>
+    <sdnType>Entity</sdnType>
+    <programList>
+      <program>IRAN</program>
+    </programList>
+    <idList>
+      <id>
+        <uid>8707</uid>
+        <idType>Registration ID</idType>
+        <idNumber>050038884</idNumber>
+        <idCountry>Croatia</idCountry>
+      </id>
+      <id>
+        <uid>8708</uid>
+        <idType>Tax ID No.</idType>
+        <idNumber>27694384517</idNumber>
+        <idCountry>Croatia</idCountry>
+      </id>
+      <id>
+        <uid>113682</uid>
+        <idType>Website</idType>
+        <idNumber>http://www.csc-sb.hr</idNumber>
+      </id>
+      <id>
+        <uid>114078</uid>
+        <idType>Additional Sanctions Information -</idType>
+        <idNumber>Subject to Secondary Sanctions</idNumber>
+      </id>
+    </idList>
+    <akaList>
+      <aka>
+        <uid>24044</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>CILINDER SISTEM D.O.O.</lastName>
+      </aka>
+      <aka>
+        <uid>24104</uid>
+        <type>a.k.a.</type>
+        <category>strong</category>
+        <lastName>CILINDER SISTEM D.O.O. ZA PROIZVODNJU I USLUGE</lastName>
+      </aka>
+    </akaList>
+    <addressList>
+      <address>
+        <uid>24081</uid>
+        <address1>Dr. Mile Budaka 1</address1>
+        <city>Slavonski Brod</city>
+        <postalCode>35000</postalCode>
+        <country>Croatia</country>
+      </address>
+      <address>
+        <uid>24082</uid>
+        <address1>1 Mile Budaka</address1>
+        <city>Slavonski Brod</city>
+        <postalCode>35000</postalCode>
+        <country>Croatia</country>
+      </address>
+    </addressList>
+  </sdnEntry>
 </sdnList>

@@ -27,7 +27,14 @@ class OfacXmlLoaderTest < ActiveSupport::TestCase
     should "parse company names" do
       assert_equal(0, Company.count)
       load_test_sdn_file
-      assert_equal(5, Company.count)
+      assert_equal(8, Company.count)
+    end
+
+    should "parse websites" do
+      assert_equal(0, Website.count)
+      load_test_sdn_file
+      assert_equal(1, Website.count)
+      assert_equal('www.csc-sb.hr', Website.first.website)
     end
   end
 
