@@ -24,6 +24,11 @@ class OfacXmlLoaderTest < ActiveSupport::TestCase
       assert_nil(last.ofac_sdn_individual)
     end
 
+    should "parse company names" do
+      assert_equal(0, Company.count)
+      load_test_sdn_file
+      assert_equal(5, Company.count)
+    end
   end
 
   def load_test_sdn_file
