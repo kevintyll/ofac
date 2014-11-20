@@ -28,7 +28,11 @@ class OfacXmlLoader
     doc = Nokogiri::XML(file)
     doc.remove_namespaces!
 
-    doc.xpath('/sdnList/sdnEntry').each do |entry|
+    puts "first scan"
+    doc.xpath('/sdnList/sdnEntry').each_with_index do |entry, i|
+      if (i % 1000 == 0) && (i > 0)
+        puts "scanned #{i} records"
+      end
       uid = entry.at_xpath('uid/text()').to_s.to_i
 
       entry.xpath('idList/id[idType = "Email Address"]/idNumber/text()').each do |idNumber|
@@ -36,7 +40,12 @@ class OfacXmlLoader
       end
     end
 
-    doc.xpath('/sdnList/sdnEntry[sdnType = "Entity"]').each do |entry|
+    puts "second scan - just entities"
+    doc.xpath('/sdnList/sdnEntry[sdnType = "Entity"]').each_with_index do |entry, i|
+      if (i % 1000 == 0) && (i > 0)
+        puts "scanned #{i} records"
+      end
+
       add_company(entry.at_xpath('lastName/text()').to_s)
       entry.xpath('akaList/aka/lastName/text()').each do |name|
         add_company(name.to_s)
@@ -46,6 +55,8 @@ class OfacXmlLoader
         add_website(website.to_s)
       end
     end
+
+    puts "done"
   end
 
   def add_email(email, uid)

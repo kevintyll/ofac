@@ -1,3 +1,4 @@
+require 'ofac/ofac_xml_loader'
 
 namespace :ofac do
   desc "Loads the current file from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx"
