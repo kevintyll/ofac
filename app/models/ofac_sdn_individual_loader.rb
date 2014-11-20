@@ -29,13 +29,18 @@ class OfacSdnIndividualLoader
       yield "Trouble downloading file.  The url may have changed." if block_given?
       return
     else
+      puts "downloaded #{uri}"
       sdn.rewind
     end
     address = Tempfile.new('sdn')
-    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')))
+    uri = URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')
+    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    puts "downloaded #{uri}"
     address.rewind
     alt = Tempfile.new('sdn')
-    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
+    uri = URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')
+    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    puts "downloaded #{uri}"
     alt.rewind
 
     if (defined?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter)) || (defined?(ActiveRecord::ConnectionAdapters::JdbcAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter))
@@ -257,6 +262,11 @@ class OfacSdnIndividualLoader
     attributes = {}
     sdn_file.each_with_index do |line, i|
 
+      if (i % 1000 == 0) && (i > 0)
+        puts "#{i} records processed."
+        yield "#{i} records processed." if block_given?
+      end
+
       #initialize the address and alt atributes to empty strings
       address_attributes = address_text_to_hash("|||||")
       alt_attributes = alt_text_to_hash("||||")
@@ -297,10 +307,6 @@ class OfacSdnIndividualLoader
             end
           end
         end
-      end
-      if (i % 5000 == 0) && (i > 0)
-        puts "#{i} records processed."
-        yield "#{i} records processed." if block_given?
       end
     end
   end

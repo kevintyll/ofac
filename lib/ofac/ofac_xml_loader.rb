@@ -3,13 +3,20 @@ require 'nokogiri'
 class OfacXmlLoader
 
   def load_current_sdn_file
+    proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
+
     xml_file = Tempfile.new('sdn')
-    xml_file.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/sdn.xml')))
+    uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.xml')
+    xml_file.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
     xml_file.rewind
+
+    puts "downloaded #{uri}"
 
     load_sdn(xml_file)
 
     xml_file.close
+
+    puts "done processing xml input file"
   end
 
   def load_sdn(file)
