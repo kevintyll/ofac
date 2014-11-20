@@ -24,7 +24,6 @@ class OfacXmlLoader
     Email.delete_all
     Company.delete_all
     Website.delete_all
-    Phone.delete_all
 
     doc = Nokogiri::XML(file)
     doc.remove_namespaces!
