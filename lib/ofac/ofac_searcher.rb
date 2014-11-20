@@ -3,6 +3,7 @@ class OfacSearcher
     ofac = OfacIndividual.new(params)
 
     hits = ofac.possible_hits
+    score = ofac.score
 
     other_hits = []
     other_hits.concat(collect_sdn_hashes(search_email_hits(params[:email])))
@@ -10,6 +11,8 @@ class OfacSearcher
     other_hits.concat(collect_sdn_hashes(search_website_hits(params[:website])))
 
     hits.concat(other_hits)
+
+    hits.sort_by { |h| -h[:score] }
 
   end
 
@@ -28,15 +31,18 @@ class OfacSearcher
   def collect_sdn_hashes(list)
     list.collect(&:ofac_sdn_individual).collect { |sdn|
 
+      hash = {}
       if sdn
-        {
+        hash = {
             :name => "#{sdn.name}|#{sdn.alternate_identity_name}",
             :city => sdn.city,
             :address => sdn.address
         }
-      else
-        {}
       end
+
+      hash[:score] = 90
+
+      hash
     }
   end
 end

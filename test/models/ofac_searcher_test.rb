@@ -17,9 +17,14 @@ class OfacSearcherTest < ActiveSupport::TestCase
     should "not find what is not there" do
       list = @searcher.search({name: 'Test'})
 
-      puts "list: #{list}"
-
       assert_equal(0, list.count)
+    end
+
+    should "find exact match on email" do
+      list = @searcher.search({name: 'Test', email: 'accw@htg-sdn.com'})
+
+      assert_equal(1, list.count)
+      assert_equal(90, list.first[:score])
     end
   end
 
