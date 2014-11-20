@@ -26,6 +26,12 @@ class OfacSearcherTest < ActiveSupport::TestCase
       assert_equal(1, list.count)
       assert_equal(90, list.first[:score])
     end
+
+    should "not find match on non-blocked email" do
+      list = @searcher.search({name: 'Test', email: 'alexei@vidmich.com'})
+
+      assert_equal(0, list.count)
+    end
   end
 
 end

@@ -1,6 +1,17 @@
 require 'nokogiri'
 
 class OfacXmlLoader
+
+  def load_current_sdn_file
+    xml_file = Tempfile.new('sdn')
+    xml_file.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/sdn.xml')))
+    xml_file.rewind
+
+    load_sdn(xml_file)
+
+    xml_file.close
+  end
+
   def load_sdn(file)
 
     Email.delete_all

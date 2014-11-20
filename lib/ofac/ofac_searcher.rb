@@ -3,7 +3,6 @@ class OfacSearcher
     ofac = OfacIndividual.new(params)
 
     hits = ofac.possible_hits
-    score = ofac.score
 
     other_hits = []
     other_hits.concat(collect_sdn_hashes(search_email_hits(params[:email])))
