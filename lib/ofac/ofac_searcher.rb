@@ -3,13 +3,9 @@ class OfacSearcher
     ofac = OfacIndividual.new(params)
 
     hits = ofac.possible_hits
-
-    other_hits = []
-    other_hits.concat(collect_sdn_hashes(search_email_hits(params[:email])))
-    other_hits.concat(collect_sdn_hashes(search_company_hits(params[:company])))
-    other_hits.concat(collect_sdn_hashes(search_website_hits(params[:website])))
-
-    hits.concat(other_hits)
+    hits.concat collect_sdn_hashes search_email_hits params[:email]
+    hits.concat collect_sdn_hashes search_company_hits params[:company]
+    hits.concat collect_sdn_hashes search_website_hits params[:website]
 
     hits.sort_by { |h| -h[:score] }
 
