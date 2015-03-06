@@ -14,7 +14,7 @@ class OfacSearcherTest < ActiveSupport::TestCase
   end
 
   context OfacSearcher do
-    should "not find what is not there" do
+    should "not be able to find what is not there" do
       list = @searcher.search({name: 'Test'})
 
       assert_equal(0, list.count)
