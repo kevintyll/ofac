@@ -12,7 +12,6 @@ rescue Gem::LoadError, LoadError
 end
 
 class OfacSdnIndividualLoader
-  #Loads the most recent file from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx
   def self.load_current_sdn_file
     puts "Reloading OFAC sdn data"
     puts "Downloading OFAC data from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx"
@@ -65,6 +64,67 @@ class OfacSdnIndividualLoader
     @alt.close
   end
 
+  def self.active_record_file_load(sdn_file, address_file, alt_file)
+    @address = address_file
+    @alt = alt_file
+
+    #OFAC data is a complete list, so we have to dump and load
+    OfacSdnIndividual.delete_all
+
+    #get the first line from the address and alt files
+    @current_address_hash = address_text_to_hash(@address.gets)
+    @current_alt_hash = alt_text_to_hash(@alt.gets)
+    attributes = {}
+    sdn_file.each_with_index do |line, i|
+
+      if (i % 1000 == 0) && (i > 0)
+        puts "#{i} records processed."
+        yield "#{i} records processed." if block_given?
+      end
+
+      #initialize the address and alt atributes to empty strings
+      address_attributes = address_text_to_hash("|||||")
+      alt_attributes = alt_text_to_hash("||||")
+
+      sdn_attributes = sdn_text_to_hash(line)
+
+      if sdn_attributes.present?
+        #get the foreign key records for this sdn
+        address_records, alt_records = foreign_key_records(sdn_attributes[:id])
+
+        if address_records.empty?
+          #no matching address records, so initialized blank values will be used.
+          if alt_records.empty?
+            #no matching address records, so initialized blank values will be used.
+            attributes = sdn_attributes.merge(address_attributes).merge(alt_attributes)
+            attributes.delete(:id)
+            OfacSdnIndividual.create(attributes)
+          else
+            alt_records.each do |alt|
+              attributes = sdn_attributes.merge(address_attributes).merge(alt)
+              attributes.delete(:id)
+              OfacSdnIndividual.create(attributes)
+            end
+          end
+        else
+          address_records.each do |address|
+            if alt_records.empty?
+              #no matching address records, so initialized blank values will be used.
+              attributes = sdn_attributes.merge(address).merge(alt_attributes)
+              attributes.delete(:id)
+              OfacSdnIndividual.create(attributes)
+            else
+              alt_records.each do |alt|
+                attributes = sdn_attributes.merge(address).merge(alt)
+                attributes.delete(:id)
+                OfacSdnIndividual.create(attributes)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 
   private
 
@@ -247,68 +307,6 @@ class OfacSdnIndividualLoader
     puts "File conversion ran for #{(Time.now - start) / 60} minutes."
     yield "File conversion ran for #{(Time.now - start) / 60} minutes." if block_given?
     return csv_file
-  end
-
-  def self.active_record_file_load(sdn_file, address_file, alt_file)
-    @address = address_file
-    @alt = alt_file
-
-    #OFAC data is a complete list, so we have to dump and load
-    OfacSdnIndividual.delete_all
-
-    #get the first line from the address and alt files
-    @current_address_hash = address_text_to_hash(@address.gets)
-    @current_alt_hash = alt_text_to_hash(@alt.gets)
-    attributes = {}
-    sdn_file.each_with_index do |line, i|
-
-      if (i % 1000 == 0) && (i > 0)
-        puts "#{i} records processed."
-        yield "#{i} records processed." if block_given?
-      end
-
-      #initialize the address and alt atributes to empty strings
-      address_attributes = address_text_to_hash("|||||")
-      alt_attributes = alt_text_to_hash("||||")
-
-      sdn_attributes = sdn_text_to_hash(line)
-
-      if sdn_attributes.present?
-        #get the foreign key records for this sdn
-        address_records, alt_records = foreign_key_records(sdn_attributes[:id])
-
-        if address_records.empty?
-          #no matching address records, so initialized blank values will be used.
-          if alt_records.empty?
-            #no matching address records, so initialized blank values will be used.
-            attributes = sdn_attributes.merge(address_attributes).merge(alt_attributes)
-            attributes.delete(:id)
-            OfacSdnIndividual.create(attributes)
-          else
-            alt_records.each do |alt|
-              attributes = sdn_attributes.merge(address_attributes).merge(alt)
-              attributes.delete(:id)
-              OfacSdnIndividual.create(attributes)
-            end
-          end
-        else
-          address_records.each do |address|
-            if alt_records.empty?
-              #no matching address records, so initialized blank values will be used.
-              attributes = sdn_attributes.merge(address).merge(alt_attributes)
-              attributes.delete(:id)
-              OfacSdnIndividual.create(attributes)
-            else
-              alt_records.each do |alt|
-                attributes = sdn_attributes.merge(address).merge(alt)
-                attributes.delete(:id)
-                OfacSdnIndividual.create(attributes)
-              end
-            end
-          end
-        end
-      end
-    end
   end
 
   # For mysql, use:
