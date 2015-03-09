@@ -1,15 +1,6 @@
 require 'net/http'
 require 'active_record'
 require 'tempfile'
-begin
-  require 'active_record/connection_adapters/mysql2_adapter'
-rescue Gem::LoadError, LoadError
-  begin
-    require 'active_record/connection_adapters/mysql_adapter'
-  rescue Gem::LoadError, LoadError
-    puts 'Not using mysql, will use active record to load data'
-  end
-end
 
 class OfacSdnIndividualLoader
   def self.load_current_sdn_file
@@ -42,21 +33,8 @@ class OfacSdnIndividualLoader
     puts "downloaded #{uri}"
     alt.rewind
 
-    if (defined?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter)) || (defined?(ActiveRecord::ConnectionAdapters::JdbcAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter))
-      puts "Converting file to csv format for Mysql import.  This could take several minutes."
-      yield "Converting file to csv format for Mysql import.  This could take several minutes." if block_given?
-
-      csv_file = convert_to_flattened_csv(sdn, address, alt) do |status|
-        yield status if block_given?
-      end
-
-      bulk_mysql_update(csv_file) do |status|
-        yield status if block_given?
-      end
-    else
-      active_record_file_load(sdn, address, alt) do |status|
-        yield status if block_given?
-      end
+    active_record_file_load(sdn, address, alt) do |status|
+      yield status if block_given?
     end
 
     sdn.close
