@@ -3,7 +3,7 @@
 * http://kevintyll.github.com/ofac
 * http://www.drexel-labs.com
 
-* http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml
+* https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx
 
 == DESCRIPTION:
 
@@ -119,7 +119,7 @@ Acceptable hash keys and their weighting in score calculation:
     bin/rake ofac:update_data
 
     * The OFAC data is not updated with any regularity, but you can sign up for email notifications when the data changes at
-        http://www.treas.gov/offices/enforcement/ofac/sdn/index.shtml.
+        https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx.
 
 == Copyright
 
