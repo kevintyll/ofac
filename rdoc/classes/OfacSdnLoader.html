@@ -113,14 +113,14 @@
 
         <div class="method-heading">
           <a href="#M000009" class="method-signature">
-          <span class="method-name">load_current_sdn_file</span><span class="method-args">() {|&quot;Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn&quot; if block_given?| ...}</span>
+          <span class="method-name">load_current_sdn_file</span><span class="method-args">() {|&quot;Downloading OFAC data from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx&quot; if block_given?| ...}</span>
           </a>
         </div>
       
         <div class="method-description">
           <p>
 Loads the most recent file from <a
-href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml</a>
+href="https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx">www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx</a>
 </p>
           <p><a class="source-toggle" href="#"
             onclick="toggleCode('M000009-source');return false;">[Source]</a></p>
@@ -129,11 +129,11 @@ href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www
 <span class="ruby-comment cmt"># File lib/ofac/models/ofac_sdn_loader.rb, line 9</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load_current_sdn_file</span>
     <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Reloading OFAC sdn data&quot;</span>
-    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn&quot;</span>
-    <span class="ruby-keyword kw">yield</span> <span class="ruby-value str">&quot;Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+    <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Downloading OFAC data from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx&quot;</span>
+    <span class="ruby-keyword kw">yield</span> <span class="ruby-value str">&quot;Downloading OFAC data from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
     <span class="ruby-comment cmt">#get the 3 data files</span>
     <span class="ruby-identifier">sdn</span>   = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'sdn'</span>)
-    <span class="ruby-identifier">bytes</span> = <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'http://www.treasury.gov/ofac/downloads/sdn.pip'</span>)))
+    <span class="ruby-identifier">bytes</span> = <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'https://www.treasury.gov/ofac/downloads/sdn.pip'</span>)))
     <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">rewind</span>
     <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bytes</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">convert_line_to_array</span>(<span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">readline</span>).<span class="ruby-identifier">size</span> <span class="ruby-operator">!=</span> <span class="ruby-value">12</span>
       <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;Trouble downloading file.  The url may have changed.&quot;</span>
@@ -143,10 +143,10 @@ href="http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml">www
       <span class="ruby-identifier">sdn</span>.<span class="ruby-identifier">rewind</span>
     <span class="ruby-keyword kw">end</span>
     <span class="ruby-identifier">address</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'sdn'</span>)
-    <span class="ruby-identifier">address</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'http://www.treasury.gov/ofac/downloads/add.pip'</span>)))
+    <span class="ruby-identifier">address</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'https://www.treasury.gov/ofac/downloads/add.pip'</span>)))
     <span class="ruby-identifier">address</span>.<span class="ruby-identifier">rewind</span>
     <span class="ruby-identifier">alt</span> = <span class="ruby-constant">Tempfile</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'sdn'</span>)
-    <span class="ruby-identifier">alt</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'http://www.treasury.gov/ofac/downloads/alt.pip'</span>)))
+    <span class="ruby-identifier">alt</span>.<span class="ruby-identifier">write</span>(<span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTP</span>.<span class="ruby-identifier">get</span>(<span class="ruby-constant">URI</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-value str">'https://www.treasury.gov/ofac/downloads/alt.pip'</span>)))
     <span class="ruby-identifier">alt</span>.<span class="ruby-identifier">rewind</span>
 
     <span class="ruby-keyword kw">if</span> <span class="ruby-constant">OfacSdn</span>.<span class="ruby-identifier">connection</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">ActiveRecord</span><span class="ruby-operator">::</span><span class="ruby-constant">ConnectionAdapters</span><span class="ruby-operator">::</span><span class="ruby-constant">MysqlAdapter</span>)

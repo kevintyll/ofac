@@ -12,14 +12,14 @@ rescue Gem::LoadError, LoadError
 end
 
 class OfacSdnIndividualLoader
-  #Loads the most recent file from http://www.treas.gov/offices/enforcement/ofac/sdn/delimit/index.shtml
+  #Loads the most recent file from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx
   def self.load_current_sdn_file
     puts "Reloading OFAC sdn data"
-    puts "Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn"
-    yield "Downloading OFAC data from http://www.treas.gov/offices/enforcement/ofac/sdn" if block_given?
+    puts "Downloading OFAC data from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx"
+    yield "Downloading OFAC data from https://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx" if block_given?
     #get the 3 data files
     sdn = Tempfile.new('sdn')
-    uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.pip')
+    uri = URI.parse('https://www.treasury.gov/ofac/downloads/sdn.pip')
     proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
 
     bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
@@ -32,10 +32,10 @@ class OfacSdnIndividualLoader
       sdn.rewind
     end
     address = Tempfile.new('sdn')
-    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')))
+    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('https://www.treasury.gov/ofac/downloads/add.pip')))
     address.rewind
     alt = Tempfile.new('sdn')
-    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')))
+    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(URI.parse('https://www.treasury.gov/ofac/downloads/alt.pip')))
     alt.rewind
 
     if (defined?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::AbstractMysqlAdapter)) || (defined?(ActiveRecord::ConnectionAdapters::JdbcAdapter) && OfacSdnIndividual.connection.kind_of?(ActiveRecord::ConnectionAdapters::JdbcAdapter))
