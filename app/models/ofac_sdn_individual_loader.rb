@@ -46,9 +46,18 @@ class OfacSdnIndividualLoader
         yield status if block_given?
       end
 
-      bulk_mysql_update(csv_file) do |status|
-        yield status if block_given?
+      begin
+        bulk_mysql_update(csv_file) do |status|
+          yield status if block_given?
+        end
+      rescue ActiveRecord::StatementInvalid
+        sdn.rewind # due to this being read as a side effect of `convert_to_flattened_csv`
+
+        active_record_file_load(sdn, address, alt) do |status|
+          yield status if block_given?
+        end
       end
+
     else
       active_record_file_load(sdn, address, alt) do |status|
         yield status if block_given?
