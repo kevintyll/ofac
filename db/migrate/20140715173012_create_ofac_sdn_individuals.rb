@@ -26,6 +26,8 @@ class CreateOfacSdnIndividuals < ActiveRecord::Migration
     # mysql can not have more than 16 parts to an index, so not including first_name_8 and alternate_name_8 in the index
     add_index :ofac_sdn_individuals, [:last_name, :first_name_1, :first_name_2, :first_name_3, :first_name_4, :first_name_5, :first_name_6, :first_name_7, :alternate_last_name, :alternate_first_name_1, :alternate_first_name_2, :alternate_first_name_3, :alternate_first_name_4, :alternate_first_name_5, :alternate_first_name_6, :alternate_first_name_7], name: 'ofac_sdn_individuals_names'
 
-    OfacSdnIndividualLoader.load_current_sdn_file
+    reversible do |direction|
+      direction.up { OfacSdnIndividualLoader.load_current_sdn_file }
+    end
   end
 end
