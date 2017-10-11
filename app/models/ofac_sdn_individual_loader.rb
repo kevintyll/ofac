@@ -5,31 +5,38 @@ require 'tempfile'
 class OfacSdnIndividualLoader
   def self.load_current_sdn_file
     puts "Reloading OFAC sdn data"
-    puts "Downloading OFAC data from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx"
-    yield "Downloading OFAC data from http://www.treasury.gov/resource-center/sanctions/SDN-List/Pages/default.aspx" if block_given?
-    #get the 3 data files
+    puts "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip"
+    yield "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip" if block_given?
+
     sdn = Tempfile.new('sdn')
-    uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.pip')
+    uri = URI.parse('https://www.treasury.gov/ofac/downloads/sdn.pip')
     proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
 
     bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
-    sdn.rewind
-    if bytes == 0 || convert_line_to_array(sdn.readline).size != 12
+    if bytes.zero? || convert_line_to_array(sdn.readline).size != 12
       raise 'Trouble downloading file.  The url may have changed.'
     else
       puts "downloaded #{uri}"
       sdn.rewind
     end
     address = Tempfile.new('sdn')
-    uri = URI.parse('http://www.treasury.gov/ofac/downloads/add.pip')
-    address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
-    puts "downloaded #{uri}"
-    address.rewind
+    uri = URI.parse('https://www.treasury.gov/ofac/downloads/add.pip')
+    bytes = address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    if bytes.zero? || convert_line_to_array(address.readline).size != 6
+      raise 'Trouble downloading file.  The url may have changed.'
+    else
+      puts "downloaded #{uri}"
+      address.rewind
+    end
     alt = Tempfile.new('sdn')
-    uri = URI.parse('http://www.treasury.gov/ofac/downloads/alt.pip')
-    alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
-    puts "downloaded #{uri}"
-    alt.rewind
+    uri = URI.parse('https://www.treasury.gov/ofac/downloads/alt.pip')
+    bytes = alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    if bytes.zero? || convert_line_to_array(alt.readline).size != 5
+      raise 'Trouble downloading file.  The url may have changed.'
+    else
+      puts "downloaded #{uri}"
+      alt.rewind
+    end
 
     active_record_file_load(sdn, address, alt) do |status|
       yield status if block_given?

@@ -6,7 +6,7 @@ class OfacXmlLoader
     proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
 
     xml_file = Tempfile.new('sdn')
-    uri = URI.parse('http://www.treasury.gov/ofac/downloads/sdn.xml')
+    uri = URI.parse('https://www.treasury.gov/ofac/downloads/sdn.xml')
     bytes = xml_file.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
     xml_file.rewind
 
@@ -14,7 +14,7 @@ class OfacXmlLoader
       raise 'Trouble downloading file.  The url may have changed.'
     else
       puts "downloaded #{uri}"
-      sdn.rewind
+      xml_file.rewind
     end
 
     load_sdn(xml_file)
