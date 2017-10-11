@@ -3,7 +3,7 @@ require 'active_record'
 require 'tempfile'
 
 class OfacSdnIndividualLoader
-  def self.load_current_sdn_file
+  def load_current_sdn_file
     puts "Reloading OFAC sdn data"
     puts "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip"
     yield "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip" if block_given?
@@ -11,6 +11,7 @@ class OfacSdnIndividualLoader
     sdn = Tempfile.new('sdn')
     uri = URI.parse('https://www.treasury.gov/ofac/downloads/sdn.pip')
     proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
+    sdn.rewind
 
     bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
     if bytes.zero? || convert_line_to_array(sdn.readline).size != 12
@@ -19,18 +20,22 @@ class OfacSdnIndividualLoader
       puts "downloaded #{uri}"
       sdn.rewind
     end
+
     address = Tempfile.new('sdn')
     uri = URI.parse('https://www.treasury.gov/ofac/downloads/add.pip')
     bytes = address.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    address.rewind
     if bytes.zero? || convert_line_to_array(address.readline).size != 6
       raise 'Trouble downloading file.  The url may have changed.'
     else
       puts "downloaded #{uri}"
       address.rewind
     end
+
     alt = Tempfile.new('sdn')
     uri = URI.parse('https://www.treasury.gov/ofac/downloads/alt.pip')
     bytes = alt.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    alt.rewind
     if bytes.zero? || convert_line_to_array(alt.readline).size != 5
       raise 'Trouble downloading file.  The url may have changed.'
     else
@@ -47,7 +52,7 @@ class OfacSdnIndividualLoader
     @alt.close
   end
 
-  def self.active_record_file_load(sdn_file, address_file, alt_file)
+  def active_record_file_load(sdn_file, address_file, alt_file)
     @address = address_file
     @alt = alt_file
 
@@ -113,20 +118,20 @@ class OfacSdnIndividualLoader
 
   #convert the file's null value to an empty string
   #and removes " chars.
-  def self.clean_file_string(line)
+  def clean_file_string(line)
     line.gsub!(/-0-(\s)?/, '')
     line.gsub!(/[\n\r"]/, '')
     line
   end
 
   #split the line into an array
-  def self.convert_line_to_array(line)
+  def convert_line_to_array(line)
     clean_file_string(line).split('|', -1) unless line.nil?
   end
 
   #return an 2 arrays of the records matching the sdn primary key
   #1 array of address records and one array of alt records
-  def self.foreign_key_records(sdn_id)
+  def foreign_key_records(sdn_id)
     address_records = []
     alt_records = []
 
@@ -150,7 +155,7 @@ class OfacSdnIndividualLoader
     return address_records.uniq, alt_records.uniq
   end
 
-  def self.sdn_text_to_hash(line)
+  def sdn_text_to_hash(line)
     if line.present?
       value_array = convert_line_to_array(line)
       if value_array[2] == 'individual' # sdn_type
@@ -172,7 +177,7 @@ class OfacSdnIndividualLoader
     end
   end
 
-  def self.address_text_to_hash(line)
+  def address_text_to_hash(line)
     unless line.nil?
       value_array = convert_line_to_array(line)
       {:id => value_array[0],
@@ -182,7 +187,7 @@ class OfacSdnIndividualLoader
     end
   end
 
-  def self.alt_text_to_hash(line)
+  def alt_text_to_hash(line)
     unless line.nil?
       value_array = convert_line_to_array(line)
       alternate_last_name, alternate_first_name = value_array[3].to_s.split(',')
@@ -202,7 +207,7 @@ class OfacSdnIndividualLoader
     end
   end
 
-  def self.convert_hash_to_mysql_import_string(record_hash)
+  def convert_hash_to_mysql_import_string(record_hash)
     new_line =
         "`#{record_hash[:last_name]}`|" +
             "`#{record_hash[:first_name_1]}`|" +
@@ -231,7 +236,7 @@ class OfacSdnIndividualLoader
     new_line
   end
 
-  def self.convert_to_flattened_csv(sdn_file, address_file, alt_file)
+  def convert_to_flattened_csv(sdn_file, address_file, alt_file)
     @address = address_file
     @alt = alt_file
 
@@ -296,7 +301,7 @@ class OfacSdnIndividualLoader
   # LOAD DATA LOCAL INFILE 'ssdm1.csv' INTO TABLE death_master_files FIELDS TERMINATED BY '|' ENCLOSED BY "`" LINES TERMINATED BY '\n';
   # This is a much faster way of loading large amounts of data into mysql.  For information on the LOAD DATA command
   # see http://dev.mysql.com/doc/refman/5.1/en/load-data.html
-  def self.bulk_mysql_update(csv_file)
+  def bulk_mysql_update(csv_file)
     puts "Deleting all records in ofac_sdn_individuals..."
     yield "Deleting all records in ofac_sdn_individuals..." if block_given?
 

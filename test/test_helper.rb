@@ -15,7 +15,7 @@ class ActiveSupport::TestCase
     sdn = File.new(File.dirname(__FILE__) + '/files/test_sdn_data_load.pip')
     address = File.new(File.dirname(__FILE__) + '/files/test_address_data_load.pip')
     alt = File.new(File.dirname(__FILE__) + '/files/test_alt_data_load.pip')
-    OfacSdnIndividualLoader.active_record_file_load(sdn, address, alt)
+    OfacSdnIndividualLoader.new.active_record_file_load(sdn, address, alt)
     sdn.close
     address.close
     alt.close

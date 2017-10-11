@@ -47,7 +47,7 @@ class OfacSdnIndividualLoaderTest < ActiveSupport::TestCase
       address = File.new(File.dirname(__FILE__) + '/../files/test_address_data_load.pip')
       alt = File.new(File.dirname(__FILE__) + '/../files/test_alt_data_load.pip')
 
-      csv = OfacSdnIndividualLoader.send(:convert_to_flattened_csv, sdn, address, alt)
+      csv = OfacSdnIndividualLoader.new.send(:convert_to_flattened_csv, sdn, address, alt)
       correctly_formatted_csv = File.open(File.dirname(__FILE__) + '/../files/valid_flattened_file.csv')
 
       csv.rewind
