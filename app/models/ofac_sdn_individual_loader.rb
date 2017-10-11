@@ -15,9 +15,7 @@ class OfacSdnIndividualLoader
     bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
     sdn.rewind
     if bytes == 0 || convert_line_to_array(sdn.readline).size != 12
-      puts "Trouble downloading file.  The url may have changed."
-      yield "Trouble downloading file.  The url may have changed." if block_given?
-      return
+      raise 'Trouble downloading file.  The url may have changed.'
     else
       puts "downloaded #{uri}"
       sdn.rewind
