@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 # To use debugger
 # gem 'debugger'
 
-gem 'rails', '=5.1.4'
+gem 'rails', '5.1.4'
 
 gem 'nokogiri'
 
