@@ -8,12 +8,12 @@ class OfacSdnIndividualLoader
     puts "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip"
     yield "Downloading OFAC data from https://www.treasury.gov/ofac/downloads/sdn.pip" if block_given?
 
+    proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
+
     sdn = Tempfile.new('sdn')
     uri = URI.parse('https://www.treasury.gov/ofac/downloads/sdn.pip')
-    proxy_addr, proxy_port = ENV['http_proxy'].gsub("http://", "").split(/:/) if ENV['http_proxy']
-    sdn.rewind
-
     bytes = sdn.write(Net::HTTP::Proxy(proxy_addr, proxy_port).get(uri))
+    sdn.rewind
     if bytes.zero? || convert_line_to_array(sdn.readline).size != 12
       raise 'Trouble downloading file.  The url may have changed.'
     else
